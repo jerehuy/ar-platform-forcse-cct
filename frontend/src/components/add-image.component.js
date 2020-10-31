@@ -25,7 +25,6 @@ export default class AddImage extends Component {
   }
 
   onChangeImage(e) {
-    console.log(e.target.key);
     this.setState({
       image: e.target.files[0]
     });
@@ -64,7 +63,7 @@ export default class AddImage extends Component {
             <input type="text" required className="form-control" value={this.state.destination} onChange={this.onChangeDestination}/>
           </div>
           <div className="form-group">
-            <input type="file" accept='.jpg' onChange={this.onChangeImage} />
+            <input type="file" required accept='.jpg' onChange={this.onChangeImage} />
           </div>
           <div className="form-group">
             <label>Description: </label>
