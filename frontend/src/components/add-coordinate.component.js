@@ -5,16 +5,24 @@ export default class AddCoordinate extends Component {
   constructor(props) {
     super(props);  
   
+    this.onChangeAudio = this.onChangeAudio.bind(this);
     this.onChangeLatitude = this.onChangeLatitude.bind(this);
     this.onChangeLongitude = this.onChangeLongitude.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     
     this.state = {
+      audio: null,
       latitude: '',
       longitude: '',
     };
   }
   
+  onChangeAudio(e) {
+    this.setState({
+      audio: e.target.files[0]
+    });
+  }
+
   onChangeLatitude(e) {
     this.setState({
       latitude: e.target.value
@@ -31,10 +39,12 @@ export default class AddCoordinate extends Component {
     e.preventDefault();
   
     const formData = new FormData();
+    formData.append('audio', this.state.audio);
     formData.append('longitude', this.state.longitude);
     formData.append('latitude', this.state.latitude);
     axios.post('http://localhost:5000/coordinates/add', formData);
     this.setState({
+      audio: null,
       latitude: '',
       longitude: ''
     })
@@ -52,6 +62,9 @@ export default class AddCoordinate extends Component {
           <div className="form-group">
             <label>Longitude</label>
             <input type="text" required className="form-control" value={this.state.longitude} onChange={this.onChangeLongitude}/>
+          </div>
+          <div className="form-group">
+            <input type="file" required accept='.mp3' onChange={this.onChangeAudio} />
           </div>
           <div className="form-group">
             <input type="submit" value="Add coordinate" className="btn btn-outline-primary"/>
