@@ -15,6 +15,10 @@ export default class AddImage extends Component {
       image: null,
       description: '',
       destination: '',
+      errorMsg: '',
+      successMsg: '',
+      showError: false,
+      showSuccess: false
     };
   }
 
@@ -45,11 +49,30 @@ export default class AddImage extends Component {
     formData.append('image', this.state.image);
     formData.append('description', this.state.description);
     formData.append('destination', this.state.destination);
-    axios.post('http://localhost:5000/images/add', formData);
+    axios.post('http://localhost:5000/images/add', formData)
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          errorMsg: '',
+          successMsg: "Added successfully!",
+          showError: false,
+          showSuccess: true
+        })
+      },(err) => {
+        console.log(err.response.data);
+        this.setState({
+          errorMsg: err.response.data,
+          successMsg: '',
+          showError: true,
+          showSuccess: false
+        })
+      });
+
     this.setState({
       image: null,
       description: '',
       filename: '',
+
     })
   }
 
@@ -69,6 +92,14 @@ export default class AddImage extends Component {
             <label>Description: </label>
             <textarea rows="3" required className="form-control" value={this.state.description} onChange={this.onChangeDescription}/>
           </div>
+          { this.state.showError
+            ? <label style={{color: "red"}}>{this.state.errorMsg}</label>
+            : null
+          }
+          { this.state.showSuccess
+            ? <label style={{color: "green"}}>{this.state.successMsg}</label>
+            : null
+          }
           <div className="form-group">
             <input type="submit" value="Add image" className="btn btn-outline-primary"/>
           </div>

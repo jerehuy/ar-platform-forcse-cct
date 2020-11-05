@@ -14,6 +14,13 @@ export default class AddCoordinate extends Component {
       audio: null,
       latitude: '',
       longitude: '',
+      radius: 50,
+      activation: 1,
+      deactivation: 10,
+      errorMsg: '',
+      successMsg: '',
+      showError: false,
+      showSuccess: false
     };
   }
   
@@ -42,7 +49,28 @@ export default class AddCoordinate extends Component {
     formData.append('audio', this.state.audio);
     formData.append('longitude', this.state.longitude);
     formData.append('latitude', this.state.latitude);
-    axios.post('http://localhost:5000/coordinates/add', formData);
+    formData.append('radius', this.state.radius);
+    formData.append('activation', this.state.activation);
+    formData.append('deactivation', this.state.deactivation);
+    axios.post('http://localhost:5000/coordinates/add', formData)
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          errorMsg: '',
+          successMsg: "Added successfully!",
+          showError: false,
+          showSuccess: true
+        })
+      },(err) => {
+        console.log(err.response.data);
+        this.setState({
+          errorMsg: err.response.data,
+          successMsg: '',
+          showError: true,
+          showSuccess: false
+        })
+      });
+
     this.setState({
       audio: null,
       latitude: '',
@@ -66,6 +94,14 @@ export default class AddCoordinate extends Component {
           <div className="form-group">
             <input type="file" required accept='.mp3' onChange={this.onChangeAudio} />
           </div>
+          { this.state.showError
+            ? <label style={{color: "red"}}>{this.state.errorMsg}</label>
+            : null
+          }
+          { this.state.showSuccess
+            ? <label style={{color: "green"}}>{this.state.successMsg}</label>
+            : null
+          }
           <div className="form-group">
             <input type="submit" value="Add coordinate" className="btn btn-outline-primary"/>
           </div>
