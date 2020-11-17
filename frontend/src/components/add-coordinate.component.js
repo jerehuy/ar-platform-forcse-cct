@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Map from './Maps';
-import '../map.css'
+import Amap from './Maps';
 export default class AddCoordinate extends Component {
 
   constructor(props) {
@@ -83,8 +82,8 @@ export default class AddCoordinate extends Component {
   render() {
     return (
       <div>
+        <Amap />
         <h4>Add new coordinates</h4>
-        <Map />
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Latitude</label>
