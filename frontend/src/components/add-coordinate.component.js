@@ -64,9 +64,8 @@ export default class AddCoordinate extends Component {
           showSuccess: true
         })
       },(err) => {
-        console.log(err.response.data);
         this.setState({
-          errorMsg: err.response.data,
+          errorMsg: err.response.data ? err.response.data : 'Failed to add new coordinates',
           successMsg: '',
           showError: true,
           showSuccess: false
