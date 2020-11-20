@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import Leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 
-Leaflet.Icon.Default.imagePath =
-'../node_modules/leaflet'
-
-delete Leaflet.Icon.Default.prototype._getIconUrl;
-
-Leaflet.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-    iconUrl: require('leaflet/dist/images/marker-icon.png'),
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+Leaflet.Marker.prototype.options.icon = Leaflet.icon({
+  iconRetinaUrl: iconRetina,
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  shadowSize: [41, 41],
+  iconSize: [25, 41],
+  popupAnchor: [1, -34],
+  iconAnchor: [12, 41]
 });
 
 class Amap extends Component {
