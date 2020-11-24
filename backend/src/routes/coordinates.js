@@ -26,14 +26,15 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-
+  /*
   console.log("latitude: " + req.body.latitude)
   console.log("longitude: " + req.body.longitude)
   console.log("audio: " + req.files.audio.name)
   console.log("radius: " + req.body.radius)
   console.log("activation: " + req.body.activation)
   console.log("deactivation: " + req.body.deactivation)
-
+  */
+ 
   fs.access(__dirname + path + dataFileName, err => {
     if (err) {
       console.log(err);
@@ -75,6 +76,33 @@ router.route('/add').post((req, res) => {
       });
     }
   });
+});
+
+router.delete("/:coordId", (req, res) => {
+  console.log('Object ');
+  fs.access(__dirname + path + dataFileName, err => {
+
+    if (err) {
+      console.log(err);
+      res.status(400).send("Failed to remove!");
+    }
+    else {
+      var targetCoord = req.params.coordId;
+      var updatedData = req.body.filter(x => {
+        return x.id != targetCoord;
+      })
+      var dataJson = {data: updatedData}
+
+      fs.writeFile(__dirname + path + dataFileName, JSON.stringify(dataJson), 'utf-8', function(err) {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Failed to remove object from data.json file");
+        }
+        console.log('Object ' + targetCoord + ' removed from data.json successfully!');
+        res.status(201).send(dataJson);
+      })
+    }
+  })
 });
 
 module.exports = router;

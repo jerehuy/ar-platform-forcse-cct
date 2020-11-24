@@ -19,7 +19,6 @@ router.route('/').get((req, res) => {
           console.log(err);
           res.status(500).send("Resources folder could not be found. Check the path!");
         }
-        console.log(data)
         res.json(JSON.parse(data));
       });
     }
@@ -27,7 +26,6 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-  console.log(req.body);
 
   fs.access(__dirname + path + dataFileName, err => {
 
