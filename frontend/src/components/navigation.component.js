@@ -14,6 +14,9 @@ export default class Navigation extends Component {
             <li className="navbar-item active">
               <Link to="/coordinate" className="nav-link">Add coordinate</Link>
             </li>
+            <li className="navbar-item active">
+              <Link to="/update" className="nav-link">Update content</Link>
+            </li>
           </ul>
         </div>
       </nav>

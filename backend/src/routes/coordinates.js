@@ -2,10 +2,27 @@ const router = require('express').Router();
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
+const path = '../../../../ResourcesAR/';
+const dataFileName = 'gps_data.json';
+
 router.route('/').get((req, res) => {
 
-  // implement later
+  fs.access(__dirname + path + dataFileName, err => {
 
+    if (err) {
+      console.log(err);
+      res.status(400).send("Resources folder could not be found. Check the path!");
+    }
+    else {
+      fs.readFile(__dirname + path + dataFileName, 'utf-8', function(err, data) {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Resources folder could not be found. Check the path!");
+        }
+        res.json(JSON.parse(data));
+      });
+    }
+  });
 });
 
 router.route('/add').post((req, res) => {
@@ -16,9 +33,6 @@ router.route('/add').post((req, res) => {
   console.log("radius: " + req.body.radius)
   console.log("activation: " + req.body.activation)
   console.log("deactivation: " + req.body.deactivation)
-
-  var path = '../../../../ResourcesAR/'
-  var dataFileName = 'gps_data.json';
 
   fs.access(__dirname + path + dataFileName, err => {
     if (err) {

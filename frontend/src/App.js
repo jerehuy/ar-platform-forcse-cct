@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navigation from "./components/navigation.component";
 import AddImage from "./components/add-image.component";
 import AddCoordinate from "./components/add-coordinate.component";
+import UpdateContent from "./components/update-content.component";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Navigation/>
         <Route path="/image" component={AddImage}/>
         <Route path="/coordinate" component={AddCoordinate}/>
+        <Route path="/update" component={UpdateContent}/>
       </div>
     </Router>
   );
