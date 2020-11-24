@@ -1,174 +1,72 @@
-// Found on https://www.freakyjolly.com/google-maps-in-react-example-application/#.X6UlHFDks2w
-
 import React, { Component } from 'react';
+import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import Leaflet from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 
-import GoogleMapReact from 'google-map-react';
-
-import styled from 'styled-components';
-
-import AutoComplete from './Autocomplete';
-import Marker from './Marker';
-
-const Wrapper = styled.main`
-  width: 100%;
-  height: 100%;
-`;
-
-class Map extends Component {
+Leaflet.Marker.prototype.options.icon = Leaflet.icon({
+  iconRetinaUrl: iconRetina,
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  shadowSize: [41, 41],
+  iconSize: [25, 41],
+  popupAnchor: [1, -34],
+  iconAnchor: [12, 41]
+});
 
 
-    state = {
-        mapApiLoaded: false,
-        mapInstance: null,
-        mapApi: null,
-        geoCoder: null,
-        places: [],
-        center: [],
-        zoom: 9,
-        address: '',
-        draggable: true,
-        lat: null,
-        lng: null
-    };
+/*function markerFinder() {
+    var marker = document.getElementById("marker");
+    marker.on('dragend', function(event) {
+    var marker = event.target;  // you could also simply access the marker through the closure
+    var result = marker.getLatLng();  // but using the passed event is cleaner
+    console.log(result);
+    this.setState({position: result});
+});}*/
 
-    componentWillMount() {
-        this.setCurrentLocation();
+class Amap extends Component {
+
+    //Here you can decide how big the map will be
+    mapSize = {
+        height: "400px", 
+        width: "400px"
     }
-
-
-    onMarkerInteraction = (childKey, childProps, mouse) => {
+    constructor (props) {
+        super(props);
+        this.state = {position: [51.505, -0.09]}
+        //this.markerHandler = this.markerHandler.bind(this);
+    }
+        
+    /*markerHandler(e) {
+        let latlng = e.target._latlng;
         this.setState({
-            draggable: false,
-            lat: mouse.lat,
-            lng: mouse.lng
+            position: latlng
         });
-    }
-    onMarkerInteractionMouseUp = (childKey, childProps, mouse) => {
-        this.setState({ draggable: true });
-        this._generateAddress();
-    }
-
-    _onChange = ({ center, zoom }) => {
-        this.setState({
-            center: center,
-            zoom: zoom,
-        });
-
-    }
-
-    _onClick = (value) => {
-        this.setState({
-            lat: value.lat,
-            lng: value.lng
-        });
-    }
-
-    apiHasLoaded = (map, maps) => {
-        this.setState({
-            mapApiLoaded: true,
-            mapInstance: map,
-            mapApi: maps,
-        });
-
-        this._generateAddress();
-    };
-
-    addPlace = (place) => {
-        this.setState({
-            places: [place],
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-        });
-        this._generateAddress()
-    };
-
-    _generateAddress() {
-        const {
-            mapApi
-        } = this.state;
-
-        const geocoder = new mapApi.Geocoder();
-
-        geocoder.geocode({ 'location': { lat: this.state.lat, lng: this.state.lng } }, (results, status) => {
-            console.log(results);
-            console.log(status);
-            if (status === 'OK') {
-                if (results[0]) {
-                    this.zoom = 12;
-                    this.setState({ address: results[0].formatted_address });
-                } else {
-                    window.alert('No results found');
-                }
-            } else {
-                window.alert('Geocoder failed due to: ' + status);
-            }
-
-        });
-    }
-
-    // Get Current Location Coordinates
-    setCurrentLocation() {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                this.setState({
-                    center: [position.coords.latitude, position.coords.longitude],
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                });
-            });
-        }
-    }
+    }*/
 
     render() {
-        const {
-            places, mapApiLoaded, mapInstance, mapApi,
-        } = this.state;
-
-
         return (
-            <Wrapper>
-                {mapApiLoaded && (
-                    <div>
-                        <AutoComplete map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />
-                    </div>
-                )}
-                <GoogleMapReact
-                    center={this.state.center}
-                    zoom={this.state.zoom}
-                    draggable={this.state.draggable}
-                    onChange={this._onChange}
-                    onChildMouseDown={this.onMarkerInteraction}
-                    onChildMouseUp={this.onMarkerInteractionMouseUp}
-                    onChildMouseMove={this.onMarkerInteraction}
-                    onChildClick={() => console.log('child click')}
-                    onClick={this._onClick}
-                    bootstrapURLKeys={{
-                        key: 'API_KEY',
-                        libraries: ['places', 'geometry'],
-                    }}
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
-                >
+            <MapContainer 
+              center={[51.505, -0.09]} 
+              zoom={13} 
+              scrollWheelZoom={false} 
+              style = {this.mapSize}>
 
-                    <Marker
-                        text={this.state.address}
-                        lat={this.state.lat}
-                        lng={this.state.lng}
-                    />
-
-
-                </GoogleMapReact>
-
-                <div className="info-wrapper">
-                    <div className="map-details">Latitude: <span>{this.state.lat}</span>, Longitude: <span>{this.state.lng}</span></div>
-                    <div className="map-details">Zoom: <span>{this.state.zoom}</span></div>
-                    <div className="map-details">Address: <span>{this.state.address}</span></div>
-                </div>
-
-
-            </Wrapper >
+                <TileLayer
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={this.state.position} draggable={true} /*eventHandlers={markerFinder()} id="marker"*/>
+                    <Popup>
+                    A pretty CSS3 popup. <br /> Easily customizable. <br />
+                    Position <pre>{JSON.stringify(this.state.position, null, 2)}</pre>
+                    </Popup>
+                </Marker>
+            </MapContainer>
         );
     }
 }
 
-export default Map;
+export default Amap;
