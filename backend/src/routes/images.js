@@ -58,9 +58,9 @@ router.route('/add').post((req, res) => {
           fs.writeFile(__dirname + path + dataFileName, JSON.stringify(dataAR), 'utf-8', function(err) {
             if (err) {
               console.log(err);
-              res.status(500).send("Failed to update data.json file");
+              res.status(500).send("Failed to update image_data.json file");
             }
-            console.log('data.json updated successfully!')
+            console.log('image_data.json updated successfully!')
             res.status(201).end();
           })
         });
@@ -86,13 +86,51 @@ router.delete("/:imageId", (req, res) => {
       fs.writeFile(__dirname + path + dataFileName, JSON.stringify(dataJson), 'utf-8', function(err) {
         if (err) {
           console.log(err);
-          res.status(500).send("Failed to remove object from data.json file");
+          res.status(500).send("Failed to remove object from image_data.json file");
         }
-        console.log('Object ' + targetImage + ' removed from data.json successfully!');
+        console.log('Object ' + targetImage + ' removed from image_data.json successfully!');
         res.status(201).send(dataJson);
       })
     }
   })
 });
+
+router.put("/:imageId", (req, res) => {
+
+  fs.access(__dirname + path + dataFileName, err => {
+
+    if (err) {
+      console.log(err);
+      res.status(400).send("Resources folder could not be found. Check the path!");
+    }
+    else {
+      fs.readFile(__dirname + path + dataFileName, 'utf-8', function(err, data) {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Resources folder could not be found. Check the path!");
+        }
+        var dataAR = JSON.parse(data)
+        var targetIndex = dataAR.data.findIndex(x => x.id == req.body.data.id);
+        var updatedImage = {...dataAR.data[targetIndex],
+                            trackedImageName: req.body.data.trackedImageName,
+                            text: req.body.data.text,
+                            audioName: req.body.data.audioName,
+                            pictureName: req.body.data.pictureName
+                          }
+        dataAR.data[targetIndex] = updatedImage;
+        fs.writeFile(__dirname + path + dataFileName, JSON.stringify(dataAR), 'utf-8', function(err) {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Failed to remove object from image_data.json file");
+          }
+          console.log('Image Object ' + req.params.imageId + ' updated successfully!');
+          res.status(201).send(dataAR);
+        })
+      })
+    }
+  })
+});
+
+
 
 module.exports = router;
