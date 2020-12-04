@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Amap from './Maps';
-import ExampleMap from './ExampleMap'
 export default function AddCoordinate(props) {
 
   const [errors, setErrors] = useState ({
@@ -57,6 +56,7 @@ export default function AddCoordinate(props) {
 
   const [position, setPosition] = useState([51.505, -0.09])
   function handleMapChange(newPosition) {
+    setData({...data, latitude: newPosition[0], longitude: newPosition[1]})
     setPosition(newPosition);
   }
 
