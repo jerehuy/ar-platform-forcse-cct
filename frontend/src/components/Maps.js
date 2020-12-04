@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leaflet';
 import Leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -16,57 +16,47 @@ Leaflet.Marker.prototype.options.icon = Leaflet.icon({
   iconAnchor: [12, 41]
 });
 
-
-/*function markerFinder() {
-    var marker = document.getElementById("marker");
-    marker.on('dragend', function(event) {
-    var marker = event.target;  // you could also simply access the marker through the closure
-    var result = marker.getLatLng();  // but using the passed event is cleaner
-    console.log(result);
-    this.setState({position: result});
-});}*/
-
-class Amap extends Component {
+function Amap(props) {
 
     //Here you can decide how big the map will be
-    mapSize = {
+    const mapSize = {
         height: "400px", 
-        width: "400px"
+        width: "600px"
     }
-    constructor (props) {
-        super(props);
-        this.state = {position: [51.505, -0.09]}
-        //this.markerHandler = this.markerHandler.bind(this);
-    }
-        
-    /*markerHandler(e) {
-        let latlng = e.target._latlng;
-        this.setState({
-            position: latlng
-        });
-    }*/
 
-    render() {
+    function MyMarker() {
+      
+        const map = useMapEvents({
+          click: (e) => {
+            const { lat, lng } = e.latlng;
+            props.onChange([lat, lng]);
+          }
+        });
+        
         return (
+          <Marker position={props.position} draggable={true}>
+            <Popup>
+                Position <pre>{JSON.stringify(props.position, null, 2)}</pre>
+            </Popup>
+          </Marker>
+        )
+      }
+
+    return (
+        <div>
             <MapContainer 
               center={[51.505, -0.09]} 
               zoom={13} 
               scrollWheelZoom={false} 
-              style = {this.mapSize}>
-
+              style = {mapSize}>
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={this.state.position} draggable={true} /*eventHandlers={markerFinder()} id="marker"*/>
-                    <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable. <br />
-                    Position <pre>{JSON.stringify(this.state.position, null, 2)}</pre>
-                    </Popup>
-                </Marker>
+                <MyMarker />
             </MapContainer>
-        );
-    }
+        </div>
+    );
 }
 
 export default Amap;
