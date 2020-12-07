@@ -58,8 +58,12 @@ export default function AddImage(props) {
           <input type="text" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
         </div>
         <div className="form-group">
+          <label htmlFor="name">Name: </label>
+          <input type="text" name="name" id="name" className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
+        </div>
+        <div className="form-group">
           <label htmlFor="tracked">Add image that you want program to recognise</label>
-          <input type="file" id="tracked" required accept='.jpg' onChange={e => setData({...data, image: e.target.files[0]})} />
+          <input type="file" id="tracked" required accept='.jpg .png' onChange={e => setData({...data, image: e.target.files[0]})} />
         </div>
         <div className="form-group">
           <label htmlFor="desc">Description: </label>
@@ -67,12 +71,12 @@ export default function AddImage(props) {
         </div>
         <div className="form-group">
           <label htmlFor="images">Content images (optional)</label>
-          <input type="file" name="images[]" id="images" multiple accept='*' onChange={e => setData({...data, contentImages: e.target.value})}/>
+          <input type="file" name="images[]" id="images" multiple accept='.jpg .png' onChange={e => setData({...data, contentImages: e.target.value})}/>
           <p id="images">Notice you need to select all wanted images at the same time</p>
         </div>
         <div className="form-group">
           <label htmlFor="audio">An audiofile (optional)</label>
-          <input type="file" name="audio" id="audio" accept='*' onChange={e => setData({...data, audioFile: e.target.value})}/>
+          <input type="file" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audioFile: e.target.value})}/>
         </div>
         { errors.showError
           ? <label style={{color: "red"}}>{errors.errorMsg}</label>
