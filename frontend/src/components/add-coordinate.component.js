@@ -70,8 +70,8 @@ export default function AddCoordinate(props) {
         Notice: Position of the marker changes when you click on the map!
       </p>
       <form onSubmit={onSubmit}>
-      <div className="form-group">
-          <label htmlFor="name">Name: </label>
+        <div className="form-group">
+          <label htmlFor="name">Name the component: </label>
           <input type="text" name="name" id="name" className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
         </div>
         <div className="form-group">
