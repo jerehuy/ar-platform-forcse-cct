@@ -49,6 +49,7 @@ router.route('/add').post((req, res) => {
         var dataAR = JSON.parse(data)
         dataAR.data.push({
           id: uuidv4(),
+          name: req.body.name,
           latitude: req.body.latitude,
           longitude: req.body.longitude,
           audioName: req.files.audio.name,

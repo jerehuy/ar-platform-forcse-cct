@@ -42,6 +42,7 @@ router.route('/add').post((req, res) => {
         var dataAR = JSON.parse(data)
         dataAR.data.push({
           id: uuidv4(),
+          name: req.body.name,
           trackedImageName: req.files.image.name,
           text: req.body.description,
           audioName: "",

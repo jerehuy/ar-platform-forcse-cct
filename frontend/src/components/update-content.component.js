@@ -85,14 +85,10 @@ export default function UpdateContent(props) {
       <h5>Images</h5>
       {Object.keys(imageData).map((keyName, i) => (
         <div>
-          <label onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].id}</label>
+          <label onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</label>
           {(selectedImage != null && imageData[i].id === selectedImage.id) && 
             <div>
               <form onSubmit={onUpdateImage}>
-                <div className="form-group">
-                  <label htmlFor="name">Rename the component: </label>
-                  <input type="text" name="name" id="name" className="form-control" onChange={e => setSelectedImage({...selectedImage, name: e.target.value})}/>
-                </div>
                 <div className="form-group">
                   <label>Tracked image name: {selectedImage.trackedImageName}</label><br/>
                   <label>Change tracked image</label><br/>
@@ -123,14 +119,10 @@ export default function UpdateContent(props) {
       <h5>Coordinates</h5>
       {Object.keys(gpsData).map((keyName, i) => (
         <div>
-          <label onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].id}</label>
+          <label onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</label>
           {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
           <div>
             <form onSubmit={onUpdateCoordinates}>
-            <div className="form-group">
-              <label htmlFor="name">Rename the component: </label>
-              <input type="text" name="name" id="name" className="form-control" onChange={e => setSelectedCoord({...selectedCoord, name: e.target.value})}/>
-            </div>
               <div className="form-group">
                 <label>Latitude</label>
                 <input type="text" required className="form-control" value={selectedCoord.latitude} onChange={e => setSelectedCoord({...selectedCoord, latitude: e.target.value})}/>
@@ -154,7 +146,7 @@ export default function UpdateContent(props) {
               <div className="form-group">
                 <label>Name of the audio file: {selectedCoord.audioName}</label> <br/>
                 <label htmlFor="audio">Change audio file: </label>
-                <input type="file" id="audio" required accept='.mp3' onChange={e => setSelectedCoord({...selectedCoord, audio: e.target.files[0]})} />
+                <input type="file" id="audio" accept='.mp3' onChange={e => setSelectedCoord({...selectedCoord, audio: e.target.files[0]})} />
               </div>
               <div className="form-group">
                 <input type="submit" value="Update coordinate" className="btn btn-outline-primary"/>

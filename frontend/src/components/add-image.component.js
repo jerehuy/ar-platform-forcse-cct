@@ -7,6 +7,7 @@ export default function AddImage(props) {
   const [data, setData] = useState ({
     image: null,
     description: '',
+    name: ''
   })
 
   const [errors, setErrors] = useState ({
@@ -46,6 +47,7 @@ export default function AddImage(props) {
       ...data,
       image: null,
       description: '',
+      name: ''
     })
   }
 
@@ -58,12 +60,13 @@ export default function AddImage(props) {
           <input type="text" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
         </div>
         <div className="form-group">
-          <label htmlFor="name">Name the component: </label>
-          <input type="text" name="name" id="name" className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
+          <label htmlFor="name">Name the component: </label> <br/>
+          <label htmlFor="name">Notice: name cannot be changed after submiting</label>
+          <input type="text" name="name" id="name" required className="form-control" value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
         </div>
         <div className="form-group">
           <label htmlFor="tracked">Add image that you want program to recognise</label>
-          <input type="file" id="tracked" required accept='.jpg .png' onChange={e => setData({...data, image: e.target.files[0]})} />
+          <input type="file" id="tracked" required accept='*.jpg *.png' onChange={e => setData({...data, image: e.target.files[0]})} />
         </div>
         <div className="form-group">
           <label htmlFor="desc">Description: </label>

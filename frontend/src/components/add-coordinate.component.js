@@ -16,7 +16,7 @@ export default function AddCoordinate(props) {
     radius: 50,
     activation: 1,
     deactivation: 10,
-    
+    name: ''
   })
   
   const onSubmit = (e) => {
@@ -50,7 +50,8 @@ export default function AddCoordinate(props) {
       ...data,
       audio: null,
       latitude: '',
-      longitude: ''
+      longitude: '',
+      name: ''
     })
   }
 
@@ -71,8 +72,9 @@ export default function AddCoordinate(props) {
       </p>
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name the component: </label>
-          <input type="text" name="name" id="name" className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
+          <label htmlFor="name">Name the component: </label> <br/>
+          <label htmlFor="name">Notice: name cannot be changed after submiting</label>
+          <input type="text" name="name" id="name" required className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
         </div>
         <div className="form-group">
           <label htmlFor="lat">Latitude</label>
