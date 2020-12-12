@@ -32,14 +32,19 @@ function Amap(props) {
             props.onChange([lat, lng]);
           }
         });
+        if(props.position && props.position.length) {
+          return (
+            <Marker position={props.position} draggable={true}>
+              <Popup>
+                  Position <pre>{JSON.stringify(props.position, null, 2)}</pre>
+              </Popup>
+            </Marker>
+          )
+        }
+        else {
+          return null;
+        }
         
-        return (
-          <Marker position={props.position} draggable={true}>
-            <Popup>
-                Position <pre>{JSON.stringify(props.position, null, 2)}</pre>
-            </Popup>
-          </Marker>
-        )
       }
 
     return (

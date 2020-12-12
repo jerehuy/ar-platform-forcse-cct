@@ -123,6 +123,7 @@ router.put("/:coordId", (req, res) => {
         var dataAR = JSON.parse(data)
         var targetIndex = dataAR.data.findIndex(x => x.id == req.body.data.id);
         var updatedCoord = {...dataAR.data[targetIndex],
+                            name: req.body.data.name,
                             latitude: req.body.data.latitude,
                             longitude: req.body.data.longitude,
                             audioName: req.body.data.audioName,

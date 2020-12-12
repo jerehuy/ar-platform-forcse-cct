@@ -90,6 +90,10 @@ export default function UpdateContent(props) {
             <div>
               <form onSubmit={onUpdateImage}>
                 <div className="form-group">
+                  <label htmlFor="name">Object name</label> <br/>
+                  <input type="text" name="name" id="name" required className="form-control" value={selectedImage.name} onChange={e => setSelectedImage({...selectedImage, name: e.target.value})}/>
+                </div>
+                <div className="form-group">
                   <label>Tracked image name: {selectedImage.trackedImageName}</label><br/>
                   <label>Change tracked image</label><br/>
                   <input type="file" accept='.jpg .png' onChange={e => setSelectedImage({...selectedImage, image: e.target.files[0]})} />
@@ -123,6 +127,10 @@ export default function UpdateContent(props) {
           {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
           <div>
             <form onSubmit={onUpdateCoordinates}>
+              <div className="form-group">
+                  <label htmlFor="name">Object name</label> <br/>
+                  <input type="text" name="name" id="name" required className="form-control" value={selectedCoord.name} onChange={e => setSelectedCoord({...selectedCoord, name: e.target.value})}/>
+                </div>
               <div className="form-group">
                 <label>Latitude</label>
                 <input type="text" required className="form-control" value={selectedCoord.latitude} onChange={e => setSelectedCoord({...selectedCoord, latitude: e.target.value})}/>

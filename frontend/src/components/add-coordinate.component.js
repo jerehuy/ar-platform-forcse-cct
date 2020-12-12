@@ -19,6 +19,8 @@ export default function AddCoordinate(props) {
     name: ''
   })
   
+  const [position, setPosition] = useState([])
+  
   const onSubmit = (e) => {
     e.preventDefault();
     var formData = new FormData();
@@ -45,17 +47,8 @@ export default function AddCoordinate(props) {
           showSuccess: false
         })
       });
-
-    setData({
-      ...data,
-      audio: null,
-      latitude: '',
-      longitude: '',
-      name: ''
-    })
   }
 
-  const [position, setPosition] = useState([51.505, -0.09])
   function handleMapChange(newPosition) {
     setData({...data, latitude: newPosition[0], longitude: newPosition[1]})
     setPosition(newPosition);

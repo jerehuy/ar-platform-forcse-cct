@@ -113,6 +113,7 @@ router.put("/:imageId", (req, res) => {
         var dataAR = JSON.parse(data)
         var targetIndex = dataAR.data.findIndex(x => x.id == req.body.data.id);
         var updatedImage = {...dataAR.data[targetIndex],
+                            name: req.body.data.name,
                             trackedImageName: req.body.data.trackedImageName,
                             text: req.body.data.text,
                             audioName: req.body.data.audioName,
