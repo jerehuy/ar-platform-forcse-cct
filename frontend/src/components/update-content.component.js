@@ -2,12 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 export default function UpdateContent(props) {
 
+  // All image objects
   const [imageData, setImageData] = useState([]);
+
+  // All coordinate objects
   const [gpsData, setGpsData] = useState([]);
 
+  // Image object that is being edited
   const [selectedImage, setSelectedImage]  = useState(null);
+
+  // Coordinate object that is being edited
   const [selectedCoord, setSelectedCoord]  = useState(null);
 
+  // Fetches image and coordinate objects
   useEffect(() => {
     axios.get('http://localhost:5000/images/')
     .then((res) => {
@@ -23,9 +30,40 @@ export default function UpdateContent(props) {
     });
   }, [])
 
+  // Sends a request to update the selected image object
   const onUpdateImage = (e) => {
     e.preventDefault();
-    axios.put('http://localhost:5000/images/'+ selectedImage.id, {data: selectedImage})
+    var formData = new FormData();
+
+    //Adds selectedImage to formData
+    for (var item in selectedImage ) {
+      if(item === "contentImages") {
+        for (let i in selectedImage.contentImages) {
+          formData.append('contentImages', selectedImage.contentImages[i])
+        }
+      } 
+      else if(item === "contentImageNames") {
+        for (let i in selectedImage.contentImageNames) {
+          formData.append('contentImageNames', selectedImage.contentImageNames[i])
+        }
+      }
+      else if(item === "removedImages") {
+        for (let i in selectedImage.removedImages) {
+          formData.append('removedImages',selectedImage.removedImages[i])
+        }
+      }
+      else {
+        formData.append(item, selectedImage[item]);
+      }
+    }
+
+    //Adds gpsData to formData, needed for updating audio files
+    for (let i in gpsData) {
+      console.log(gpsData[i].audioName)
+      formData.append('gpsAudioNames', gpsData[i].audioName)
+    }
+  
+    axios.put('http://localhost:5000/images/'+ selectedImage.id, formData)
     .then((res) => {
       setImageData(res.data.data);
       setSelectedImage(null);
@@ -33,9 +71,15 @@ export default function UpdateContent(props) {
       console.log(err);
     });
   }
+
+  // Sends a request to update the selected coordinate object
   const onUpdateCoordinates = (e) => {
     e.preventDefault(e);
-    axios.put('http://localhost:5000/coordinates/' + selectedCoord.id, {data: selectedCoord})
+    var formData = new FormData();
+    for (var item in selectedCoord ) {
+        formData.append(item, selectedCoord[item]);
+    }
+    axios.put('http://localhost:5000/coordinates/' + selectedCoord.id, formData)
     .then((res) => {
       setGpsData(res.data.data);
       setSelectedCoord(null);
@@ -43,9 +87,10 @@ export default function UpdateContent(props) {
       console.log(err);
     });
   }
+
+  // Sends a request to remove the selected image object
   const onRemoveImage = (e) => {
-    console.log(e.target.id)
-    axios.delete('http://localhost:5000/images/' + e.target.id, {data: imageData})
+    axios.delete('http://localhost:5000/images/' + e.target.id, {data: {imageData, gpsData}})
       .then((res) => {
         setImageData(res.data.data);
         setSelectedImage(null);
@@ -53,8 +98,10 @@ export default function UpdateContent(props) {
         console.log(err);
       });
   }
+
+  // Sends a request to remove the selected coordinate object
   const onRemoveCoordinates = (e) => {
-    axios.delete('http://localhost:5000/coordinates/' + e.target.id, {data: gpsData})
+    axios.delete('http://localhost:5000/coordinates/' + e.target.id, {data: {gpsData, imageData}})
     .then((res) => {
       setGpsData(res.data.data);
     },(err) => {
@@ -62,21 +109,49 @@ export default function UpdateContent(props) {
     });
   }
 
+  // Changes the currently selected image object to another
   const onChangeSelectedImage = (newSelectedImage) => {
     if(selectedImage != null && selectedImage.id === newSelectedImage.id) {
       setSelectedImage(null);
     }
     else {
-      setSelectedImage(newSelectedImage)
+      setSelectedImage({...newSelectedImage, removedImages: [], contentImages: []})
     }
   }
 
+  // Changes the currently selected coordinate object to another
   const onChangeSelectedCoord = (newSelectedCoord) => {
     if(selectedCoord != null && selectedCoord.id === newSelectedCoord.id) {
       setSelectedCoord(null);
     }
     else {
       setSelectedCoord(newSelectedCoord)
+    }
+  }
+
+  // Handles content image removals
+  const onRemoveContentImage = (e, imgName) => {
+    e.preventDefault();
+    var names = selectedImage.contentImageNames.filter(x => x !== imgName);
+    var imgs = selectedImage.contentImages.filter(x => x.name !== imgName);
+    var removed = selectedImage.removedImages;
+    removed.push(imgName);
+
+    setSelectedImage({...selectedImage, contentImageNames: names, contentImages: imgs, removedImages: removed})
+  }
+
+  // Handles content image additions
+  const onAddContentImage = (e) => {
+    e.preventDefault();
+
+    if(selectedImage.contentImageNames.filter(imgName => imgName === e.target.files[0].name).length === 0) {
+      var imgs = selectedImage.contentImages;
+      imgs.push(e.target.files[0]);
+
+      var imgNames = selectedImage.contentImageNames;
+      imgNames.push(e.target.files[0].name);
+
+      setSelectedImage({...selectedImage, contentImages: imgs, contentImageNames: imgNames})
     }
   }
 
@@ -96,7 +171,7 @@ export default function UpdateContent(props) {
                 <div className="form-group">
                   <label>Tracked image name: {selectedImage.trackedImageName}</label><br/>
                   <label>Change tracked image</label><br/>
-                  <input type="file" accept='.jpg .png' onChange={e => setSelectedImage({...selectedImage, image: e.target.files[0]})} />
+                  <input type="file" accept='.jpg, .png' onChange={e => setSelectedImage({...selectedImage, image: e.target.files[0]})} />
                 </div>
                 <div className="form-group">
                   <label>Description: </label>
@@ -104,15 +179,21 @@ export default function UpdateContent(props) {
                 </div>
                 <div className="form-group">
                   <label htmlFor="images">Content images (optional)</label>
-                  <input type="file" name="images[]" id="images" multiple accept='.jpg .png' onChange={e => setSelectedImage({...selectedImage, contentImages: e.target.value})}/>
-                  <p id="images">Notice you need to select all wanted images at the same time</p>
+                  <input type="file" name="images[]" id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
+                  {selectedImage.contentImageNames.map(imgName => (
+                    <div className="input-group">
+                      <p>{imgName}</p>
+                      <button onClick={e => onRemoveContentImage(e, imgName)}>Remove</button>
+                    </div>
+                  ))}
                 </div>
                 <div className="form-group">
-                  <label htmlFor="audio">An audiofile (optional)</label>
-                  <input type="file" name="audio" id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audioFile: e.target.value})}/>
+                  <label htmlFor="audio">Add audiofile (optional)</label>
+                  <p>{selectedImage.audioName}</p>
+                  <input type="file" name="audio" id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
                 </div>
                 <div className="form-group">
-                  <input type="submit" value="Update image" className="btn btn-outline-primary"/>
+                  <input type="submit" value="Save changes" className="btn btn-outline-primary"/>
                 </div>
               </form>
               <button id={imageData[i].id} onClick={onRemoveImage} className="btn btn-outline-secondary">Remove</button>
@@ -154,10 +235,10 @@ export default function UpdateContent(props) {
               <div className="form-group">
                 <label>Name of the audio file: {selectedCoord.audioName}</label> <br/>
                 <label htmlFor="audio">Change audio file: </label>
-                <input type="file" id="audio" accept='.mp3' onChange={e => setSelectedCoord({...selectedCoord, audio: e.target.files[0]})} />
+                <input type="file" id="audio" accept='.mp3' onChange={e => setSelectedCoord({...selectedCoord, audio: e.target.files[0], audioName: e.target.files[0].name})} />
               </div>
               <div className="form-group">
-                <input type="submit" value="Update coordinate" className="btn btn-outline-primary"/>
+                <input type="submit" value="Save changes" className="btn btn-outline-primary"/>
               </div>
             </form>
             <button id={gpsData[i].id} onClick={onRemoveCoordinates} className="btn btn-outline-secondary">Remove</button>

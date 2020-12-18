@@ -3,13 +3,20 @@ import axios from 'axios';
 
 export default function AddImage(props) {
 
+  // Path to resource folder
   const [destination, setDestination] = useState("");
+  
+  // Image object data
   const [data, setData] = useState ({
     image: null,
     description: '',
     name: ''
   })
 
+  // Content images
+  const [contentImages, setContentImages] = useState([])
+
+  // Error handling
   const [errors, setErrors] = useState ({
     errorMsg: '',
     successMsg: '',
@@ -17,12 +24,16 @@ export default function AddImage(props) {
     showSuccess: false,
   })
 
+  // Sends a request to add a new image object
   const onSubmit = (e) => {
     e.preventDefault();
 
     var formData = new FormData();
     for (var item in data ) {
         formData.append(item, data[item]);
+    }
+    for (const key of Object.keys(contentImages)) {
+      formData.append('contentImages', contentImages[key])
     }
     axios.post('http://localhost:5000/images/add', formData)
       .then((res) => {
@@ -65,7 +76,7 @@ export default function AddImage(props) {
         </div>
         <div className="form-group">
           <label htmlFor="tracked">Add image that you want program to recognise</label>
-          <input type="file" id="tracked" required accept='*.jpg *.png' onChange={e => setData({...data, image: e.target.files[0]})} />
+          <input type="file" id="tracked" required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
         </div>
         <div className="form-group">
           <label htmlFor="desc">Description: </label>
@@ -73,12 +84,12 @@ export default function AddImage(props) {
         </div>
         <div className="form-group">
           <label htmlFor="images">Content images (optional)</label>
-          <input type="file" name="images[]" id="images" multiple accept='.jpg .png' onChange={e => setData({...data, contentImages: e.target.value})}/>
+          <input type="file" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
           <p id="images">Notice you need to select all wanted images at the same time</p>
         </div>
         <div className="form-group">
           <label htmlFor="audio">An audiofile (optional)</label>
-          <input type="file" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audioFile: e.target.value})}/>
+          <input type="file" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
         </div>
         { errors.showError
           ? <label style={{color: "red"}}>{errors.errorMsg}</label>

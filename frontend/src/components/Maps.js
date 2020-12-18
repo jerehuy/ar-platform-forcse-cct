@@ -50,7 +50,7 @@ function Amap(props) {
     return (
         <div>
             <MapContainer 
-              center={[51.505, -0.09]} 
+              center={[61.49613147254746, 23.760337829589847]} 
               zoom={13} 
               scrollWheelZoom={false} 
               style = {mapSize}>
