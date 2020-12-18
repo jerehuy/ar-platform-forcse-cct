@@ -60,8 +60,7 @@ export default function AddImage(props) {
           <input type="text" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
         </div>
         <div className="form-group">
-          <label htmlFor="name">Name the component: </label> <br/>
-          <label htmlFor="name">Notice: name cannot be changed after submiting</label>
+          <label htmlFor="name">Name the component: </label>
           <input type="text" name="name" id="name" required className="form-control" value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
         </div>
         <div className="form-group">

@@ -65,8 +65,7 @@ export default function AddCoordinate(props) {
       </p>
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name the component: </label> <br/>
-          <label htmlFor="name">Notice: name cannot be changed after submiting</label>
+          <label htmlFor="name">Name the component: </label>
           <input type="text" name="name" id="name" required className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
         </div>
         <div className="form-group">
