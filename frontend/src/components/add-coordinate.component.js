@@ -3,12 +3,15 @@ import axios from 'axios';
 import Amap from './Maps';
 export default function AddCoordinate(props) {
 
+  // Error handling
   const [errors, setErrors] = useState ({
     errorMsg: '',
     successMsg: '',
     showError: false,
     showSuccess: false
   })
+
+  // Coordinate object data
   const [data, setData] = useState({
     audio: null,
     latitude: '',
@@ -19,8 +22,10 @@ export default function AddCoordinate(props) {
     name: ''
   })
   
+  // Current marker position
   const [position, setPosition] = useState([])
   
+  // Sends a request to add a new image object
   const onSubmit = (e) => {
     e.preventDefault();
     var formData = new FormData();
@@ -49,6 +54,7 @@ export default function AddCoordinate(props) {
       });
   }
 
+  // Handles map changes
   function handleMapChange(newPosition) {
     setData({...data, latitude: newPosition[0], longitude: newPosition[1]})
     setPosition(newPosition);
