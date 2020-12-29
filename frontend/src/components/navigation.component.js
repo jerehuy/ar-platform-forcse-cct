@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 export default function Navigation(props) {
 
   return (
-    <nav className="navbar navbar-dark bg-primary navbar-expand-lg">
-      <div className="navbar-collapse">
-        <ul className="navbar-nav mr-auto">
+    <nav className="navbar navbar-dark bg-primary navbar-expand-sm rounded-bottom">
+        <ul className="navbar-nav">
           <li className="navbar-item active">
             <Link to="/image" className="nav-link">Add image</Link>
           </li>
@@ -16,7 +15,6 @@ export default function Navigation(props) {
             <Link to="/update" className="nav-link">Update content</Link>
           </li>
         </ul>
-      </div>
     </nav>
   )
 }
