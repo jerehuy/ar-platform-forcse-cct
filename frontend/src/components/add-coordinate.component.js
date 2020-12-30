@@ -115,7 +115,7 @@ export default function AddCoordinate(props) {
           ? <label className="alert alert-success alert-dismissible fade show">{errors.successMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showSuccess: false})}></button></label>
           : null
         }
-        <div className="form-group">
+        <div className="form-group d-flex justify-content-center">
           <input type="submit" value="Add coordinate" className="btn btn-outline-primary"/>
         </div>
     </form>
