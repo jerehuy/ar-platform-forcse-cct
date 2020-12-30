@@ -52,6 +52,16 @@ export default function AddCoordinate(props) {
           showSuccess: false
         })
       });
+      setData({
+        ...data,
+        audio: null,
+        latitude: '',
+        longitude: '',
+        radius: 50,
+        activation: 1,
+        deactivation: 10,
+        name: ''
+      })
   }
 
   // Handles map changes
@@ -74,7 +84,7 @@ export default function AddCoordinate(props) {
           <div className="col-xl-6">
             <div className="form-group">
               <label htmlFor="name">Name the component: </label>
-              <input type="text" name="name" id="name" required className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
+              <input type="text" name="name" id="name" required value={data.name} className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
             </div>
             <div className="form-group">
               <label htmlFor="lat">Latitude: </label>
@@ -108,11 +118,11 @@ export default function AddCoordinate(props) {
         </div>
 
         { errors.showError
-          ? <label className="alert alert-danger alert-dismissible fade show">{errors.errorMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showError: false})}>&times;</button></label>
+          ? <div className="d-flex justify-content-center"><label className="alert alert-danger alert-dismissible fade showd-flex justify-content-center">{errors.errorMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showError: false})}>&times;</button></label></div>
           : null
         }
         { errors.showSuccess
-          ? <label className="alert alert-success alert-dismissible fade show">{errors.successMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showSuccess: false})}></button></label>
+          ? <div className="d-flex justify-content-center"><label className="alert alert-success alert-dismissible fade show">{errors.successMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showSuccess: false})}>&times;</button></label></div>
           : null
         }
         <div className="form-group d-flex justify-content-center">
