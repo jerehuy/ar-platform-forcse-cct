@@ -58,45 +58,47 @@ export default function AddImage(props) {
       ...data,
       image: null,
       description: '',
-      name: ''
+      name: '',
+      audio: null
     })
   }
 
   return (
     <div>
       <h4>Add new image</h4>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="was-validated">
         <div className="form-group">
-          <label>Unity Resource Folder Path: </label>
-          <input type="text" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
+          <label htmlFor="path">Unity Resource Folder Path: </label>
+          <input type="text" name="path" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
         </div>
         <div className="form-group">
           <label htmlFor="name">Name the component: </label>
           <input type="text" name="name" id="name" required className="form-control" value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
         </div>
         <div className="form-group">
-          <label htmlFor="tracked">Add image that you want program to recognise</label>
-          <input type="file" id="tracked" required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
+          <label htmlFor="tracked">Tracked Image</label>
+          <input type="file" name="tracked" class="form-control-file border rounded" id="tracked" required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
+          <small id="trackedHelpText" className="form-text text-muted">Add image that you want program to recognise</small>
         </div>
         <div className="form-group">
           <label htmlFor="desc">Description: </label>
           <textarea id="desc" rows="3" required className="form-control" value={data.description} onChange={e => setData({...data, description: e.target.value})}/>
         </div>
         <div className="form-group">
-          <label htmlFor="images">Content images (optional)</label>
-          <input type="file" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
-          <p id="images">Notice you need to select all wanted images at the same time</p>
+          <label htmlFor="images[]">Content images (optional)</label>
+          <input type="file" class="form-control-file border rounded" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
+          <small id="imagesHelpText" className="form-text text-muted">Notice you need to select all wanted images at the same time</small>
         </div>
         <div className="form-group">
           <label htmlFor="audio">An audiofile (optional)</label>
-          <input type="file" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
+          <input type="file" class="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
         </div>
         { errors.showError
-          ? <label style={{color: "red"}}>{errors.errorMsg}</label>
+          ? <label className="alert alert-dangeer fade show alert-dismissible">{errors.errorMsg}<button type="button" className="close" onClick={() => setErrors({...errors, showError: false})}>&times;</button></label>
           : null
         }
         { errors.showSuccess
-          ? <label style={{color: "green"}}>{errors.successMsg}</label>
+          ? <label className="alert alert-success fade show alert-dismissible">{errors.successMsg}<button type="button" className="close" onClick={() => setErrors({...errors, showSuccess: false})}>&times;</button></label>
           : null
         }
         <div className="form-group">
