@@ -65,7 +65,7 @@ export default function AddImage(props) {
 
   return (
     <div>
-      <h4>Add new image</h4>
+      <h4 className="py-2">Add new image</h4>
       <form onSubmit={onSubmit} className="was-validated">
         <div className="form-group">
           <label htmlFor="path">Unity Resource Folder Path: </label>
@@ -77,7 +77,7 @@ export default function AddImage(props) {
         </div>
         <div className="form-group">
           <label htmlFor="tracked">Tracked Image</label>
-          <input type="file" name="tracked" class="form-control-file border rounded" id="tracked" required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
+          <input type="file" name="tracked" className="form-control-file border rounded" id="tracked" required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
           <small id="trackedHelpText" className="form-text text-muted">Add image that you want program to recognise</small>
         </div>
         <div className="form-group">
@@ -86,12 +86,12 @@ export default function AddImage(props) {
         </div>
         <div className="form-group">
           <label htmlFor="images[]">Content images (optional)</label>
-          <input type="file" class="form-control-file border rounded" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
+          <input type="file" className="form-control-file border rounded" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
           <small id="imagesHelpText" className="form-text text-muted">Notice you need to select all wanted images at the same time</small>
         </div>
         <div className="form-group">
           <label htmlFor="audio">An audiofile (optional)</label>
-          <input type="file" class="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
+          <input type="file" className="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
         </div>
         { errors.showError
           ? <label className="alert alert-dangeer fade show alert-dismissible">{errors.errorMsg}<button type="button" className="close" onClick={() => setErrors({...errors, showError: false})}>&times;</button></label>

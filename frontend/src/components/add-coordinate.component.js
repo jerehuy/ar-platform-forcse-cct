@@ -62,54 +62,63 @@ export default function AddCoordinate(props) {
 
   return (
     <div>
-      <h4>Add new coordinates</h4>
-      <Amap position={position} onChange={handleMapChange} />
-      <p>
-        Position of the marker <br />
-        Latitude: {position[0]}, Longtitude: {position[1]} <br/>
-        Notice: Position of the marker changes when you click on the map!
-      </p>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name the component: </label>
-          <input type="text" name="name" id="name" required className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
+      <h4 className="py-2 text-center">Add new coordinates</h4>
+      <form onSubmit={onSubmit} className="was-validated">
+        <div className="row">
+            <div className="col-xl-6">
+            <Amap position={position} onChange={handleMapChange} />
+            <small className="form-text text-muted">
+              Notice: Position of the marker changes when you click on the map!
+            </small>
+          </div>
+          <div className="col-xl-6">
+            <div className="form-group">
+              <label htmlFor="name">Name the component: </label>
+              <input type="text" name="name" id="name" required className="form-control" onChange={e => setData({...data, name: e.target.value})}/>
+            </div>
+            <div className="form-group">
+              <label htmlFor="lat">Latitude: </label>
+              <input type="text" id="lat" required className="form-control" value={position[0]} onChange={e => setData({...data, latitude: e.target.value})}/>
+              <small className="form-text text-muted">Click on the map on left to get latitude.</small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="lng">Longitude: </label>
+              <input type="text" id="lng" required className="form-control" value={position[1]} onChange={e => setData({...data, longitude: e.target.value})}/>
+              <small className="form-text text-muted">Click on the map on left to get longitude.</small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="audio">Add audio file: </label>
+              <input type="file" id="audio" className="form-control-file border rounded" required accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="rad">Radius (meters): </label>
+              <input type="number" id="rad" defaultValue={data.radius} className="form-control" onChange={e => setData({...data, radius: e.target.value})}/>
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="lat">Latitude</label>
-          <input type="text" id="lat" required className="form-control" value={position[0]} onChange={e => setData({...data, latitude: e.target.value})}/>
+        <div className="row">
+          <div className="form-group col-sm">
+            <label htmlFor="act">Activation (seconds): </label>
+            <input type="number" id="act" defaultValue={data.activation} className="form-control" onChange={e => setData({...data, activation: e.target.value})}/>
+          </div>
+          <div className="form-group col-sm">
+            <label htmlFor="dact">Deactivation (seconds): </label>
+            <input type="number" id="dact" defaultValue={data.deactivation} className="form-control" onChange={e => setData({...data, deactivation: e.target.value})}/>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="lng">Longitude</label>
-          <input type="text" id="lng" required className="form-control" value={position[1]} onChange={e => setData({...data, longitude: e.target.value})}/>
-        </div>
-        <div className="form-group">
-          <label htmlFor="rad">Radius (meters?)</label>
-          <input type="number" id="rad" defaultValue={data.radius} className="form-control" onChange={e => setData({...data, radius: e.target.value})}/>
-        </div>
-        <div className="form-group">
-          <label htmlFor="act">Activation (seconds?)</label>
-          <input type="number" id="act" defaultValue={data.activation} className="form-control" onChange={e => setData({...data, activation: e.target.value})}/>
-        </div>
-        <div className="form-group">
-          <label htmlFor="dact">Deactivation (seconds?)</label>
-          <input type="number" id="dact" defaultValue={data.deactivation} className="form-control" onChange={e => setData({...data, deactivation: e.target.value})}/>
-        </div>
-        <div className="form-group">
-          <label htmlFor="audio">Add audio file</label>
-          <input type="file" id="audio" required accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})} />
-        </div>
+
         { errors.showError
-          ? <label style={{color: "red"}}>{errors.errorMsg}</label>
+          ? <label className="alert alert-danger alert-dismissible fade show">{errors.errorMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showError: false})}>&times;</button></label>
           : null
         }
         { errors.showSuccess
-          ? <label style={{color: "green"}}>{errors.successMsg}</label>
+          ? <label className="alert alert-success alert-dismissible fade show">{errors.successMsg} <button type="button" className="close" onClick={() => setErrors({...errors, showSuccess: false})}></button></label>
           : null
         }
         <div className="form-group">
           <input type="submit" value="Add coordinate" className="btn btn-outline-primary"/>
         </div>
-      </form>
-    </div>
+    </form>
+  </div>
   )
 }
