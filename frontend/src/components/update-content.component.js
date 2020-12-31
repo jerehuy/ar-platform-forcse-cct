@@ -90,6 +90,7 @@ export default function UpdateContent(props) {
 
   // Sends a request to remove the selected image object
   const onRemoveImage = (e) => {
+    if (window.confirm('Are you sure you wish to remove this image component?')) {
     axios.delete('http://localhost:5000/images/' + e.target.id, {data: {imageData, gpsData}})
       .then((res) => {
         setImageData(res.data.data);
@@ -97,16 +98,19 @@ export default function UpdateContent(props) {
       },(err) => {
         console.log(err);
       });
+    }
   }
 
   // Sends a request to remove the selected coordinate object
   const onRemoveCoordinates = (e) => {
-    axios.delete('http://localhost:5000/coordinates/' + e.target.id, {data: {gpsData, imageData}})
-    .then((res) => {
-      setGpsData(res.data.data);
-    },(err) => {
-      console.log(err);
-    });
+    if (window.confirm('Are you sure you wish to remove this coordinate component?')) {
+      axios.delete('http://localhost:5000/coordinates/' + e.target.id, {data: {gpsData, imageData}})
+      .then((res) => {
+        setGpsData(res.data.data);
+      },(err) => {
+        console.log(err);
+      });
+    }
   }
 
   // Changes the currently selected image object to another
@@ -132,12 +136,14 @@ export default function UpdateContent(props) {
   // Handles content image removals
   const onRemoveContentImage = (e, imgName) => {
     e.preventDefault();
-    var names = selectedImage.contentImageNames.filter(x => x !== imgName);
-    var imgs = selectedImage.contentImages.filter(x => x.name !== imgName);
-    var removed = selectedImage.removedImages;
-    removed.push(imgName);
+    if (window.confirm('Are you sure you wish to remove this content image?')) {
+      var names = selectedImage.contentImageNames.filter(x => x !== imgName);
+      var imgs = selectedImage.contentImages.filter(x => x.name !== imgName);
+      var removed = selectedImage.removedImages;
+      removed.push(imgName);
 
-    setSelectedImage({...selectedImage, contentImageNames: names, contentImages: imgs, removedImages: removed})
+      setSelectedImage({...selectedImage, contentImageNames: names, contentImages: imgs, removedImages: removed})
+    }
   }
 
   // Handles content image additions
@@ -180,12 +186,13 @@ export default function UpdateContent(props) {
                   </div>
                   <div className="form-group">
                     <label htmlFor="images">Content images (optional): </label>
-                    <input type="file" className="form-control-file border rounded" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
+                    <input type="file" className="form-control-file border rounded" name="images[]" id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
+                    <small className="form-text text-muted">Add new content images one at a time they will show up below this text.</small>
                     <div className="borderd rounded">
                     {selectedImage.contentImageNames.map(imgName => (
                       <label>
-                        {imgName}
-                        <button onClick={e => onRemoveContentImage(e, imgName)}>Remove Content Image</button>
+                        {imgName + " "}  
+                        <button className="btn btn-outline-danger" onClick={e => onRemoveContentImage(e, imgName)}>Remove Content Image</button>
                       </label>
                     ))}
                     </div>
@@ -199,7 +206,7 @@ export default function UpdateContent(props) {
                     <input type="submit" value="Save changes" className="btn btn-outline-primary"/>
                   </div>
                 </form>
-                <button id={imageData[i].id} onClick={onRemoveImage} className="btn btn-outline-danger">Remove component</button>
+                <button id={imageData[i].id} onClick={onRemoveImage} className="btn btn-outline-danger">Remove component "{selectedImage.name}"</button>
               </div>
             }
           </div>
@@ -246,7 +253,7 @@ export default function UpdateContent(props) {
                   <input type="submit" value="Save changes" className="btn btn-outline-primary"/>
                 </div>
               </form>
-              <button id={gpsData[i].id} onClick={onRemoveCoordinates} className="btn btn-outline-danger">Remove Component</button>
+              <button id={gpsData[i].id} onClick={onRemoveCoordinates} className="btn btn-outline-danger">Remove Component "{selectedCoord.name}"</button>
             </div>
             } 
           </div>
