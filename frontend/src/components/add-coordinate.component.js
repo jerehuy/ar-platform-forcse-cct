@@ -82,7 +82,7 @@ export default function AddCoordinate(props) {
           <input type="text" name="path" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
         </div>
         <div className="row">
-            <div className="col-xl-6">
+            <div className="col-xl-6 pl-md-5">
             <Amap position={position} onChange={handleMapChange} />
             <small className="form-text text-muted">
               Notice: Position of the marker changes when you click on the map!

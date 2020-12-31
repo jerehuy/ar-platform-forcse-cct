@@ -21,7 +21,7 @@ function Amap(props) {
     //Here you can decide how big the map will be
     const mapSize = {
         height: "450px", 
-        width: "530px"
+        width: "500px"
     }
 
     function MyMarker() {

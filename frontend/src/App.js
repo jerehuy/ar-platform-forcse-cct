@@ -9,7 +9,7 @@ import UpdateContent from "./components/update-content.component";
 function App() {
   return (
     <Router>
-      <div className="container"> 
+      <div className="container bg-light pb-1 rounded-bottom"> 
         <Navigation/>
         <Route path="/image" component={AddImage}/>
         <Route path="/coordinate" component={AddCoordinate}/>
