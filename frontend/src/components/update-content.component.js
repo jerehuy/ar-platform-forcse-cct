@@ -188,17 +188,16 @@ export default function UpdateContent(props) {
                     <label htmlFor="images">Content images (optional): </label>
                     <input type="file" className="form-control-file border rounded" name="images[]" id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
                     <small className="form-text text-muted">Add new content images one at a time they will show up below this text.</small>
-                    <div className="borderd rounded">
                     {selectedImage.contentImageNames.map(imgName => (
-                      <label>
-                        {imgName + " "}  
-                        <button className="btn btn-outline-danger" onClick={e => onRemoveContentImage(e, imgName)}>Remove Content Image</button>
-                      </label>
+                      <div>
+                        <label htmlFor="contentImg" className="pr-1">{imgName}</label>
+                        <button id="contentImg" name="removeContentImg" className="btn btn-outline-danger" onClick={e => onRemoveContentImage(e, imgName)}>Remove Content Image</button>
+                      </div>
                     ))}
-                    </div>
                   </div>
                   <div className="form-group">
-                    <label>Name of the audio file: {selectedImage.audioName}</label> <br/>
+                    <label className="pr-1">Name of the audio file: {selectedImage.audioName} </label> 
+                    <button className="btn btn-outline-danger">Remove audiofile</button> <br/>
                     <label htmlFor="audio">Add/Change audiofile (optional): </label>
                     <input type="file" className="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
                   </div>
@@ -233,15 +232,15 @@ export default function UpdateContent(props) {
                   <input type="text" required className="form-control" value={selectedCoord.longitude} onChange={e => setSelectedCoord({...selectedCoord, longitude: e.target.value})}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="rad">Radius (meters?)</label>
+                  <label htmlFor="rad">Radius (meters)</label>
                   <input type="number" id="rad" defaultValue={selectedCoord.radius} className="form-control" onChange={e => setSelectedCoord({...selectedCoord, radius: e.target.value})}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="act">Activation (seconds?)</label>
+                  <label htmlFor="act">Activation (seconds)</label>
                   <input type="number" id="act" defaultValue={selectedCoord.activation} className="form-control" onChange={e => setSelectedCoord({...selectedCoord, activation: e.target.value})}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="dact">Deactivation (seconds?)</label>
+                  <label htmlFor="dact">Deactivation (seconds)</label>
                   <input type="number" id="dact" defaultValue={selectedCoord.deactivation} className="form-control" onChange={e => setSelectedCoord({...selectedCoord, deactivation: e.target.value})}/>
                 </div>
                 <div className="form-group">
