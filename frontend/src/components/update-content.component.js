@@ -222,7 +222,7 @@ export default function UpdateContent(props) {
         <h5 className="py-2">Coordinates</h5>
         {Object.keys(gpsData).map((keyName, i) => (
           <div className="list-group">
-            <label className="list-group-item list-group-item-action rounded" onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</label>
+            <label className="list-group-item list-group-item-action" onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</label>
             {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
             <div className="pb-3">
               <form onSubmit={onUpdateCoordinates}>
