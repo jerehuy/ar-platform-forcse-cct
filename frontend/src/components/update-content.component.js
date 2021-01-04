@@ -133,6 +133,13 @@ export default function UpdateContent(props) {
     }
   }
 
+  const onRemoveAudio = (e, audioName) => {
+    e.preventDefault();
+    if (window.confirm('Are you sure you wish to remove this content image?')) {
+      setSelectedImage({...selectedImage, audioName:""});
+    }
+  }
+
   // Handles content image removals
   const onRemoveContentImage = (e, imgName) => {
     e.preventDefault();
@@ -197,7 +204,7 @@ export default function UpdateContent(props) {
                   </div>
                   <div className="form-group">
                     <label className="pr-1">Name of the audio file: {selectedImage.audioName} </label> 
-                    <button className="btn btn-outline-danger">Remove audiofile</button> <br/>
+                    <button className="btn btn-outline-danger" onClick={e => onRemoveAudio(e, selectedImage.audioName)}>Remove audiofile</button> <br/>
                     <label htmlFor="audio">Add/Change audiofile (optional): </label>
                     <input type="file" className="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
                   </div>
