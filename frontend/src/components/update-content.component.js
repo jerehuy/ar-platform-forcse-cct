@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Amap from "./Maps";
 export default function UpdateContent(props) {
 
   // All image objects
@@ -127,9 +128,11 @@ export default function UpdateContent(props) {
   const onChangeSelectedCoord = (newSelectedCoord) => {
     if(selectedCoord != null && selectedCoord.id === newSelectedCoord.id) {
       setSelectedCoord(null);
+      setPosition([]);
     }
     else {
-      setSelectedCoord(newSelectedCoord)
+      setSelectedCoord(newSelectedCoord);
+      setPosition([newSelectedCoord.latitude, newSelectedCoord.longitude]);
     }
   }
 
@@ -166,6 +169,13 @@ export default function UpdateContent(props) {
 
       setSelectedImage({...selectedImage, contentImages: imgs, contentImageNames: imgNames})
     }
+  }
+
+  //map handeling
+  const [position, setPosition] = useState([])
+  function handleMapChange(newPosition) {
+    setSelectedCoord({...selectedCoord, latitude: newPosition[0], longitude: newPosition[1]})
+    setPosition(newPosition);
   }
 
   return (
@@ -225,6 +235,10 @@ export default function UpdateContent(props) {
             <label className="list-group-item list-group-item-action" onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</label>
             {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
             <div className="pb-3">
+              <Amap position={position} onChange={handleMapChange}/>
+              <small className="form-text text-muted">
+                Notice: Position of the marker changes when you click on the map!
+              </small>
               <form onSubmit={onUpdateCoordinates}>
                 <div className="form-group">
                     <label htmlFor="name">Object name</label> <br/>
@@ -232,11 +246,11 @@ export default function UpdateContent(props) {
                   </div>
                 <div className="form-group">
                   <label>Latitude</label>
-                  <input type="text" required className="form-control" value={selectedCoord.latitude} onChange={e => setSelectedCoord({...selectedCoord, latitude: e.target.value})}/>
+                  <input type="text" required className="form-control" value={selectedCoord.latitude} />
                 </div>
                 <div className="form-group">
                   <label>Longitude</label>
-                  <input type="text" required className="form-control" value={selectedCoord.longitude} onChange={e => setSelectedCoord({...selectedCoord, longitude: e.target.value})}/>
+                  <input type="text" required className="form-control" value={selectedCoord.longitude} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="rad">Radius (meters)</label>
