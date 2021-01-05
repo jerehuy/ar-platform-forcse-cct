@@ -3,9 +3,6 @@ import axios from 'axios';
 import Amap from './Maps';
 export default function AddCoordinate(props) {
 
-  // Path to resource folder
-  const [destination, setDestination] = useState("");
-
   // Error handling
   const [errors, setErrors] = useState ({
     errorMsg: '',
@@ -69,7 +66,7 @@ export default function AddCoordinate(props) {
 
   // Handles map changes
   function handleMapChange(newPosition) {
-    setData({...data, latitude: newPosition[0], longitude: newPosition[1]})
+    setData({...data, latitude: newPosition[0], longitude: newPosition[1]});
     setPosition(newPosition);
   }
 
@@ -77,10 +74,6 @@ export default function AddCoordinate(props) {
     <div>
       <h4 className="pt-2 text-center">Add new coordinates</h4>
       <form onSubmit={onSubmit} className="was-validated">
-        <div className="form-group">
-          <label htmlFor="path">Unity Resource Folder Path: </label>
-          <input type="text" name="path" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
-        </div>
         <div className="row">
             <div className="col-xl-6 pl-md-5">
             <Amap position={position} onChange={handleMapChange} />

@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 export default function AddImage(props) {
-
-  // Path to resource folder
-  const [destination, setDestination] = useState("");
   
   // Image object data
   const [data, setData] = useState ({
@@ -67,10 +64,6 @@ export default function AddImage(props) {
     <div>
       <h4 className="pt-2 text-center">Add new image</h4>
       <form onSubmit={onSubmit} className="was-validated">
-        <div className="form-group">
-          <label htmlFor="path">Unity Resource Folder Path: </label>
-          <input type="text" name="path" required className="form-control" value={destination} onChange={e => setDestination(e.target.value)}/>
-        </div>
         <div className="row">
           <div className="col-md">
             <div className="form-group">
