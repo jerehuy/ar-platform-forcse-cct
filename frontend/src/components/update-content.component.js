@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Amap from "./Maps";
-export default function UpdateContent(props) {
+export default function UpdateContent({path}) {
 
   // All image objects
   const [imageData, setImageData] = useState([]);
@@ -21,13 +21,13 @@ export default function UpdateContent(props) {
     .then((res) => {
       setImageData(res.data.data);
     },(err) => {
-      console.log(err);
+      //console.log(err);
     });
     axios.get('http://localhost:5000/coordinates/')
     .then((res) => {
       setGpsData(res.data.data);
     },(err) => {
-      console.log(err);
+      //console.log(err);
     });
   }, [])
 
@@ -60,7 +60,6 @@ export default function UpdateContent(props) {
 
     //Adds gpsData to formData, needed for updating audio files
     for (let i in gpsData) {
-      console.log(gpsData[i].audioName)
       formData.append('gpsAudioNames', gpsData[i].audioName)
     }
   
@@ -69,7 +68,7 @@ export default function UpdateContent(props) {
       setImageData(res.data.data);
       setSelectedImage(null);
     },(err) => {
-      console.log(err);
+      //console.log(err);
     });
   }
 
@@ -85,7 +84,7 @@ export default function UpdateContent(props) {
       setGpsData(res.data.data);
       setSelectedCoord(null);
     },(err) => {
-      console.log(err);
+      //console.log(err);
     });
   }
 
@@ -97,7 +96,7 @@ export default function UpdateContent(props) {
         setImageData(res.data.data);
         setSelectedImage(null);
       },(err) => {
-        console.log(err);
+        //console.log(err);
       });
     }
   }
@@ -109,12 +108,12 @@ export default function UpdateContent(props) {
       .then((res) => {
         setGpsData(res.data.data);
       },(err) => {
-        console.log(err);
+        //console.log(err);
       });
     }
   }
 
-  // Changes the currently selected image object to another
+  // Changes the selected image object
   const onChangeSelectedImage = (newSelectedImage) => {
     if(selectedImage != null && selectedImage.id === newSelectedImage.id) {
       setSelectedImage(null);
@@ -124,7 +123,7 @@ export default function UpdateContent(props) {
     }
   }
 
-  // Changes the currently selected coordinate object to another
+  // Changes the selected coordinate object
   const onChangeSelectedCoord = (newSelectedCoord) => {
     if(selectedCoord != null && selectedCoord.id === newSelectedCoord.id) {
       setSelectedCoord(null);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function AddImage(props) {
+export default function AddImage({path}) {
   
   // Image object data
   const [data, setData] = useState ({
@@ -58,6 +58,7 @@ export default function AddImage(props) {
       name: '',
       audio: null
     })
+    document.getElementById('tracked').value= null;
   }
 
   return (

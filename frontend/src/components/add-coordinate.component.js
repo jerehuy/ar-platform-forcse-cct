@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Amap from './Maps';
-export default function AddCoordinate(props) {
+export default function AddCoordinate({path}) {
 
   // Error handling
   const [errors, setErrors] = useState ({
@@ -16,10 +16,10 @@ export default function AddCoordinate(props) {
     audio: null,
     latitude: '',
     longitude: '',
-    radius: 50,
-    activation: 1,
-    deactivation: 10,
-    name: ''
+    radius: '50',
+    activation: '1',
+    deactivation: '10',
+    name: '',
   })
   
   // Current marker position
@@ -32,9 +32,9 @@ export default function AddCoordinate(props) {
     for (var item in data ) {
         formData.append(item, data[item]);
     }
+    formData.append("path", path);
     axios.post('http://localhost:5000/coordinates/add', formData)
       .then((res) => {
-        console.log(res);
 
         setErrors({
           ...errors,
@@ -57,11 +57,12 @@ export default function AddCoordinate(props) {
         audio: null,
         latitude: '',
         longitude: '',
-        radius: 50,
-        activation: 1,
-        deactivation: 10,
+        radius: '50',
+        activation: '1',
+        deactivation: '10',
         name: ''
       })
+      document.getElementById('audio').value= null;
   }
 
   // Handles map changes

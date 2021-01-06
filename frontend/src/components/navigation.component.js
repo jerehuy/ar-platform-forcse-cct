@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import React, { useState } from "react";
+import axios from 'axios';
 
-export default function Navigation(props) {
+export default function Navigation({onChangePath}) {
 
   // Path to resource folder can be changed without submitting
   const [destination, setDestination] = useState("");
@@ -10,7 +11,14 @@ export default function Navigation(props) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setPermaDestination(destination);
+    axios.post('http://localhost:5000/path/update', {path: destination})
+      .then((res) => {
+        console.log(res);
+        setPermaDestination(destination);
+        onChangePath(destination);
+      },(err) => {
+        console.log(err);
+      })
   }
 
   return (
