@@ -74,6 +74,7 @@ export default function AddCoordinate(props) {
   return (
     <Container>
       <h4 className="pt-2 text-center">Add new coordinates</h4>
+
       <form onSubmit={onSubmit} className="was-validated">
         <Row>
           <Col xl="6" className="pl-md-5">
@@ -82,35 +83,42 @@ export default function AddCoordinate(props) {
               Position of the marker changes when you click on the map!
             </Form.Text>
           </Col>
+
           <Col xl='6'>
             <Form.Group controlId="componentName">
               <Form.Label htmlFor="name">Name the component: </Form.Label>
               <Form.Control type="text" id="name" required value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
             </Form.Group>
+
             <Form.Group controlId="latitude">
               <Form.Label htmlFor="lat">Latitude: </Form.Label>
               <Form.Control type="text" id="lat" required value={position[0]} onChange={e => setData({...data, latitude: e.target.value})}/>
               <Form.Text className="text-muted">Click on the map on left to get latitude.</Form.Text>
             </Form.Group>
+
             <Form.Group controlId="longtitude">
               <Form.Label htmlFor="lng">Longitude: </Form.Label>
               <Form.Control type="text" id="lng" required value={position[1]} onChange={e => setData({...data, longitude: e.target.value})}/>
               <Form.Text className="text-muted">Click on the map on left to get longitude.</Form.Text>
             </Form.Group>
+
             <Form.Group controlId="audioFile">
               <Form.File id="audio" label="Add audio file: " required accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})} />
             </Form.Group>
+
             <Form.Group controlId="radius">
               <Form.Label htmlFor="rad">Radius (meters): </Form.Label>
               <Form.Control type="number" id="rad" defaultValue={data.radius} onChange={e => setData({...data, radius: e.target.value})}/>
             </Form.Group>
           </Col>
         </Row>
+
         <Row>
           <Form.Group as={Col} sm controlId="activationTime">
             <Form.Label htmlFor="act">Activation (seconds): </Form.Label>
             <Form.Control type="number" id="act" defaultValue={data.activation} onChange={e => setData({...data, activation: e.target.value})}/>
           </Form.Group>
+
           <Form.Group as={Col} sm controlId="deactivationTime">
             <Form.Label htmlFor="dact">Deactivation (seconds): </Form.Label>
             <Form.Control type="number" id="dact" defaultValue={data.deactivation} onChange={e => setData({...data, deactivation: e.target.value})}/>
@@ -133,10 +141,11 @@ export default function AddCoordinate(props) {
             </div>
           : null
         }
+        
         <Form.Group className="form-group d-flex justify-content-center">
           <Button type="submit" variant="outline-primary">Add coordinate</Button>
         </Form.Group>
-    </form>
-  </Container>
+      </form>
+    </Container>
   )
 }

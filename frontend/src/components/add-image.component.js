@@ -64,6 +64,7 @@ export default function AddImage(props) {
   return (
     <Container>
       <h4 className="pt-2 text-center">Add new image</h4>
+
       <form onSubmit={onSubmit} className="was-validated">
         <Row>
           <Col md>
@@ -72,6 +73,7 @@ export default function AddImage(props) {
               <Form.Control type="text" id="name" required value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
             </Form.Group>
           </Col>
+
           <Col md>
             <Form.Group controlId="trackedImage">
               <Form.File label="Tracked Image: " required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
@@ -79,10 +81,12 @@ export default function AddImage(props) {
             </Form.Group>
           </Col>
         </Row>
+
         <Form.Group controlId="description">
           <Form.Label htmlFor="desc">Description: </Form.Label>
           <Form.Control as="textarea" id="desc" rows="3" required value={data.description} onChange={e => setData({...data, description: e.target.value})}/>
         </Form.Group>
+
         <Row>
           <Col md>
             <Form.Group controlId="contentImages">
@@ -90,13 +94,13 @@ export default function AddImage(props) {
               <Form.Text id="imagesHelpText" className="text-muted">Notice you need to select all wanted images at the same time.</Form.Text>
             </Form.Group>
           </Col>
+
           <Col md>
             <Form.Group controlId="audioFile">
               <Form.File label="An audiofile (optional):" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
             </Form.Group>
           </Col>
         </Row>
-        
         
         { errors.showError
           ? <div className="d-flex justify-content-center">
@@ -113,9 +117,11 @@ export default function AddImage(props) {
             </div>
           : null
         }
+
         <Form.Group className="d-flex justify-content-center">
           <Button type="submit" variant="outline-primary">Add image</Button>
         </Form.Group>
+
       </form>
     </Container>
   )

@@ -18,27 +18,39 @@ export default function Navigation(props) {
 
   return (
     <Navbar sticky="top" bg="primary" variant="dark" collapseOnSelect className="rounded-bottom">
+
       <Navbar.Toggle aria-controls="navigation" />
       <Navbar.Collapse id="navigation">
+        
         <Nav className="mr-auto">
+
           <LinkContainer to="/image">
             <Nav.Link>Add image</Nav.Link>
           </LinkContainer>
+
           <LinkContainer to="/coordinate">
             <Nav.Link>Add coordinate</Nav.Link>
           </LinkContainer>
+
           <LinkContainer to="/update">
             <Nav.Link>Update content</Nav.Link>
           </LinkContainer>
+
         </Nav>
+
         <form onSubmit={onSubmit} className="was-validated form-inline">
+
           <Form.Group controlId="resourcePath">
             <Form.Label className="pr-2">Unity Resource Folder Path: </Form.Label>
             <Form.Control required type="text" onChange={e => setDestination(e.target.value)}/>
           </Form.Group>
+          
           <Button type="submit" variant="success">Submit</Button>
+
         </form>
+
         <Navbar.Text className="pl-2">{permaDestination}</Navbar.Text>
+
       </Navbar.Collapse>
     </Navbar>
   )
