@@ -172,7 +172,7 @@ export default function UpdateContent(props) {
     }
   }
 
-  //map handeling
+  //map handling
   const [position, setPosition] = useState([])
   function handleMapChange(newPosition) {
     setSelectedCoord({...selectedCoord, latitude: newPosition[0], longitude: newPosition[1]})
@@ -211,7 +211,7 @@ export default function UpdateContent(props) {
                     <Form.Label htmlFor="images">Content images (optional): </Form.Label>
                     <Form.File label="Add new content image" id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
                     <Form.Text className="text-muted">Add new content images one at a time they will show up below this text.</Form.Text>
-                    
+
                     {selectedImage.contentImageNames.map(imgName => (
                       <Form.Group controlId="contentImage">
                         <Form.Label htmlFor="contentImg" className="pr-1">{imgName}</Form.Label>
@@ -223,7 +223,6 @@ export default function UpdateContent(props) {
                   <Form.Group controlId="audioFileForImg">
                     <Form.Label className="pr-1">Name of the audio file: {selectedImage.audioName} </Form.Label> 
                     <Button variant="outline-danger" onClick={e => onRemoveAudio(e, selectedImage.audioName)}>Remove audiofile</Button> <br/>
-                    <Form.Label htmlFor="audio"></Form.Label>
                     <Form.File label="Add/Change audiofile (optional): " id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
                   </Form.Group>
 
