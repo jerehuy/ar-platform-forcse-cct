@@ -232,7 +232,7 @@ export default function UpdateContent(props) {
                     </Form.Group>
 
                     <Form.Group as={Col} sm>
-                      <Button id={imageData[i].id} variant="outline-danger" onClick={onRemoveImage}>Remove component "{selectedImage.name}"</Button>
+                      <Button id={imageData[i].id} variant="outline-danger" onClick={onRemoveImage}>Remove "{selectedImage.name}"</Button>
                     </Form.Group>
                   </Row>
                 </form>
@@ -301,7 +301,7 @@ export default function UpdateContent(props) {
                 </Form.Group>
 
                 <Form.Group as={Col} sm>
-                  <Button id={gpsData[i].id} variant="outline-danger" onClick={onRemoveCoordinates}>Remove Component "{selectedCoord.name}"</Button>
+                  <Button id={gpsData[i].id} variant="outline-danger" onClick={onRemoveCoordinates}>Remove "{selectedCoord.name}"</Button>
                 </Form.Group>
                 </Row>
               </form>
