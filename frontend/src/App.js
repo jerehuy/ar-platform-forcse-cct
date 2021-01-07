@@ -5,16 +5,17 @@ import Navigation from "./components/navigation.component";
 import AddImage from "./components/add-image.component";
 import AddCoordinate from "./components/add-coordinate.component";
 import UpdateContent from "./components/update-content.component";
+import {Container} from "react-bootstrap";
 
 function App() {
   return (
     <Router>
-      <div className="container bg-light pb-1 rounded-bottom"> 
+      <Container className="bg-light pb-2">
         <Navigation/>
         <Route path="/image" component={AddImage}/>
         <Route path="/coordinate" component={AddCoordinate}/>
         <Route path="/update" component={UpdateContent}/>
-      </div>
+      </Container>
     </Router>
   );
 }
