@@ -20,8 +20,8 @@ function Amap(props) {
 
     //Here you can decide how big the map will be
     const mapSize = {
-        height: "400px", 
-        width: "600px"
+        height: "450px", 
+        width: "500px"
     }
 
     function MyMarker() {
@@ -32,20 +32,25 @@ function Amap(props) {
             props.onChange([lat, lng]);
           }
         });
+        if(props.position && props.position.length) {
+          return (
+            <Marker position={props.position} draggable={true}>
+              <Popup>
+                  Position <pre>{JSON.stringify(props.position, null, 2)}</pre>
+              </Popup>
+            </Marker>
+          )
+        }
+        else {
+          return null;
+        }
         
-        return (
-          <Marker position={props.position} draggable={true}>
-            <Popup>
-                Position <pre>{JSON.stringify(props.position, null, 2)}</pre>
-            </Popup>
-          </Marker>
-        )
       }
 
     return (
         <div>
             <MapContainer 
-              center={[51.505, -0.09]} 
+              center={[61.49613147254746, 23.760337829589847]} 
               zoom={13} 
               scrollWheelZoom={false} 
               style = {mapSize}>
