@@ -17,6 +17,12 @@ export default function UpdateContent(props) {
   // Coordinate object that is being edited
   const [selectedCoord, setSelectedCoord]  = useState(null);
 
+  //Active image object
+  const [activeImg, setActiveImg] = useState("");
+
+  //Active coordinate object
+  const [activeCoord, setActiveCoord] = useState("");
+
   // Fetches image and coordinate objects
   useEffect(() => {
     axios.get('http://localhost:5000/images/')
@@ -119,9 +125,11 @@ export default function UpdateContent(props) {
   const onChangeSelectedImage = (newSelectedImage) => {
     if(selectedImage != null && selectedImage.id === newSelectedImage.id) {
       setSelectedImage(null);
+      setActiveImg("");
     }
     else {
-      setSelectedImage({...newSelectedImage, removedImages: [], contentImages: []})
+      setSelectedImage({...newSelectedImage, removedImages: [], contentImages: []});
+      setActiveImg(newSelectedImage.name);
     }
   }
 
@@ -130,10 +138,12 @@ export default function UpdateContent(props) {
     if(selectedCoord != null && selectedCoord.id === newSelectedCoord.id) {
       setSelectedCoord(null);
       setPosition([]);
+      setActiveCoord("");
     }
     else {
       setSelectedCoord(newSelectedCoord);
       setPosition([newSelectedCoord.latitude, newSelectedCoord.longitude]);
+      setActiveCoord(newSelectedCoord.name);
     }
   }
 
@@ -186,7 +196,7 @@ export default function UpdateContent(props) {
 
         {Object.keys(imageData).map((keyName, i) => (
           <ListGroup>
-            <ListGroup.Item action onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</ListGroup.Item>
+            <ListGroup.Item active={(activeImg === imageData[i].name) ? true : false} action onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</ListGroup.Item>
 
             {(selectedImage != null && imageData[i].id === selectedImage.id) && 
               <Container className="pb-3 border">
@@ -247,7 +257,7 @@ export default function UpdateContent(props) {
 
         {Object.keys(gpsData).map((keyName, i) => (
           <ListGroup>
-            <ListGroup.Item action onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</ListGroup.Item>
+            <ListGroup.Item active={(activeCoord === gpsData[i].name) ? true : false} action onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</ListGroup.Item>
 
             {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
             <Container className="pb-3 border">
