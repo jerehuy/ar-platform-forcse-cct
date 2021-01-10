@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Row, Col, Form, Button, Alert, Container } from 'react-bootstrap';
 
 export default function AddImage({path}) {
   
@@ -62,58 +63,67 @@ export default function AddImage({path}) {
   }
 
   return (
-    <div>
+    <Container>
       <h4 className="pt-2 text-center">Add new image</h4>
+
       <form onSubmit={onSubmit} className="was-validated">
-        <div className="row">
-          <div className="col-md">
-            <div className="form-group">
-              <label htmlFor="name">Name the component: </label>
-              <input type="text" name="name" id="name" required className="form-control" value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
-            </div>
-          </div>
-          <div className="col-md">
-            <div className="form-group">
-              <label htmlFor="tracked">Tracked Image: </label>
-              <input type="file" name="tracked" className="form-control-file border rounded" id="tracked" required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
-              <small id="trackedHelpText" className="form-text text-muted">Add image that you want program to recognise</small>
-            </div>
-          </div>
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="desc">Description: </label>
-          <textarea id="desc" rows="3" required className="form-control" value={data.description} onChange={e => setData({...data, description: e.target.value})}/>
-        </div>
-        <div className="row">
-          <div className="col-md">
-            <div className="form-group">
-              <label htmlFor="images[]">Content images (optional): </label>
-              <input type="file" className="form-control-file border rounded" name="images[]" id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
-              <small id="imagesHelpText" className="form-text text-muted">Notice you need to select all wanted images at the same time</small>
-            </div>
-          </div>
-          <div className="col-md">
-            <div className="form-group">
-              <label htmlFor="audio">An audiofile (optional): </label>
-              <input type="file" className="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
-            </div>
-          </div>
-        </div>
-        
+        <Row>
+          <Col md>
+            <Form.Group controlId="componentName">
+              <Form.Label htmlFor="name">Name of the component: </Form.Label>
+              <Form.Control type="text" id="name" required value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
+            </Form.Group>
+          </Col>
+
+          <Col md>
+            <Form.Group controlId="trackedImage">
+              <Form.File label="Tracked Image: " required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
+              <Form.Text id="trackedHelpText" className="text-muted">Add image that you want program to recognise</Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Form.Group controlId="description">
+          <Form.Label htmlFor="desc">Description: </Form.Label>
+          <Form.Control as="textarea" id="desc" rows="3" required value={data.description} onChange={e => setData({...data, description: e.target.value})}/>
+        </Form.Group>
+
+        <Row>
+          <Col md>
+            <Form.Group controlId="contentImages">
+              <Form.File label="Content images (optional): " id="images" multiple accept='.jpg, .png' onChange={e => setContentImages(e.target.files)}/>
+              <Form.Text id="imagesHelpText" className="text-muted">Notice you need to select all wanted images at the same time.</Form.Text>
+            </Form.Group>
+          </Col>
+
+          <Col md>
+            <Form.Group controlId="audioFile">
+              <Form.File label="An audiofile (optional):" id="audio" accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})}/>
+            </Form.Group>
+          </Col>
+        </Row>
         
         { errors.showError
-          ? <div className="d-flex justify-content-center"><label className="alert alert-dangeer fade show alert-dismissible">{errors.errorMsg}<button type="button" className="close" onClick={() => setErrors({...errors, showError: false})}>&times;</button></label></div>
+          ? <div className="d-flex justify-content-center">
+              <Alert variant="danger" dismissible onClose={() => setErrors({...errors, showError: false})} className="fade show alert-dismissible">
+                {errors.errorMsg}
+              </Alert>
+            </div>
           : null
         }
         { errors.showSuccess
-          ? <div className="d-flex justify-content-center"><label className="alert alert-success fade show alert-dismissible">{errors.successMsg}<button type="button" className="close" onClick={() => setErrors({...errors, showSuccess: false})}>&times;</button></label></div>
+          ? <div className="d-flex justify-content-center">
+              <Alert variant="success" dismissible onClose={() => setErrors({...errors, showSuccess: false})} className="fade show">{errors.successMsg}
+              </Alert>
+            </div>
           : null
         }
-        <div className="form-group d-flex justify-content-center">
-          <input type="submit" value="Add image" className="btn btn-outline-primary"/>
-        </div>
+
+        <Form.Group className="d-flex justify-content-center">
+          <Button type="submit" variant="outline-primary">Add image</Button>
+        </Form.Group>
+
       </form>
-    </div>
+    </Container>
   )
 }

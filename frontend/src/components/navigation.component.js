@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
-import React, { useState } from "react";
+//import { Link } from 'react-router-dom'; Tämä korvattu react-router-bootstrapillä
+import React, { useState } from 'react';
+import { Navbar, Nav, Form, Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import axios from 'axios';
 
 export default function Navigation({onChangePath}) {
@@ -22,26 +24,41 @@ export default function Navigation({onChangePath}) {
   }
 
   return (
-    <nav className="navbar navbar-dark bg-primary navbar-expand-sm rounded-bottom sticky-top">
-        <ul className="navbar-nav">
-          <li className="navbar-item active">
-            <Link to="/image" className="nav-link">Add image</Link>
-          </li>
-          <li className="navbar-item active">
-            <Link to="/coordinate" className="nav-link">Add coordinate</Link>
-          </li>
-          <li className="navbar-item active">
-            <Link to="/update" className="nav-link">Update content</Link>
-          </li>
-        </ul>
-        <form onSubmit={onSubmit} className="was-validated form-inline float-right">
-          <div className="form-group">
-            <label htmlFor="path" className="pr-1">Unity Resource Folder Path: </label>
-            <input id="path" type="text" required className="form-control" onChange={e => setDestination(e.target.value)}/>
-          </div>
-          <button type="submit" className="btn btn-success">Submit</button>
-          <div className="navbar-text pl-2">{permaDestination}</div>
+    <Navbar sticky="top" bg="primary" variant="dark" collapseOnSelect className="rounded-bottom">
+
+      <Navbar.Toggle aria-controls="navigation" />
+      <Navbar.Collapse id="navigation">
+        
+        <Nav className="mr-auto">
+
+          <LinkContainer to="/image">
+            <Nav.Link>Add image</Nav.Link>
+          </LinkContainer>
+
+          <LinkContainer to="/coordinate">
+            <Nav.Link>Add coordinate</Nav.Link>
+          </LinkContainer>
+
+          <LinkContainer to="/update">
+            <Nav.Link>Update content</Nav.Link>
+          </LinkContainer>
+
+        </Nav>
+
+        <form onSubmit={onSubmit} className="was-validated form-inline">
+
+          <Form.Group controlId="resourcePath">
+            <Form.Label className="pr-2">Unity Resource Folder Path: </Form.Label>
+            <Form.Control required type="text" onChange={e => setDestination(e.target.value)}/>
+          </Form.Group>
+          
+          <Button type="submit" variant="success">Submit</Button>
+
         </form>
-    </nav>
+
+        <Navbar.Text className="pl-2">{permaDestination}</Navbar.Text>
+
+      </Navbar.Collapse>
+    </Navbar>
   )
 }

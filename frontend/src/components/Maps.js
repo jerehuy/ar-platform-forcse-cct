@@ -26,7 +26,7 @@ function Amap(props) {
 
     function MyMarker() {
       
-        const map = useMapEvents({
+        useMapEvents({
           click: (e) => {
             const { lat, lng } = e.latlng;
             props.onChange([lat, lng]);
