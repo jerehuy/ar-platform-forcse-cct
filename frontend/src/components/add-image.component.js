@@ -77,7 +77,7 @@ export default function AddImage({path}) {
 
           <Col md>
             <Form.Group controlId="trackedImage">
-              <Form.File label="Tracked Image: " required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
+              <Form.File id="tracked" label="Tracked Image: " required accept='.jpg, .png' onChange={e => setData({...data, image: e.target.files[0]})} />
               <Form.Text id="trackedHelpText" className="text-muted">Add image that you want program to recognise</Form.Text>
             </Form.Group>
           </Col>
