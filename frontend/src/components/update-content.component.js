@@ -219,7 +219,7 @@ export default function UpdateContent(props) {
                   
                   <Form.Group controlId="contentImages">
                     <Form.Label htmlFor="images">Content images (optional): </Form.Label>
-                    <Form.File label="Add new content image" id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
+                    <Form.File id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
                     <Form.Text className="text-muted">Add new content images one at a time they will show up below this text.</Form.Text>
 
                     {selectedImage.contentImageNames.map(imgName => (
@@ -232,7 +232,10 @@ export default function UpdateContent(props) {
 
                   <Form.Group controlId="audioFileForImg">
                     <Form.Label className="pr-1">Name of the audio file: {selectedImage.audioName} </Form.Label> 
-                    <Button variant="outline-danger" onClick={e => onRemoveAudio(e, selectedImage.audioName)}>Remove audiofile</Button> <br/>
+                    {selectedImage.audioName
+                      ? <Button variant="outline-danger" onClick={e => onRemoveAudio(e, selectedImage.audioName)}>Remove audiofile</Button>
+                      : null
+                    } <br/>
                     <Form.File label="Add/Change audiofile (optional): " id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
                   </Form.Group>
 
