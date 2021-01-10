@@ -149,7 +149,7 @@ export default function UpdateContent(props) {
 
   const onRemoveAudio = (e, audioName) => {
     e.preventDefault();
-    if (window.confirm('Are you sure you wish to remove this content image?')) {
+    if (window.confirm('Are you sure you wish to remove this audio?')) {
       setSelectedImage({...selectedImage, audioName:""});
     }
   }
