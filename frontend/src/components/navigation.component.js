@@ -44,19 +44,22 @@ export default function Navigation({onChangePath}) {
           </LinkContainer>
 
         </Nav>
-
         <form onSubmit={onSubmit} className="was-validated form-inline">
 
           <Form.Group controlId="resourcePath">
-            <Form.Label className="pr-2">Unity Resource Folder Path: </Form.Label>
+            <Form.Label className="pr-1">Unity Resource Folder Path: </Form.Label> <br/>
             <Form.Control required type="text" onChange={e => setDestination(e.target.value)}/>
           </Form.Group>
           
           <Button type="submit" variant="success">Submit</Button>
 
+          <Form.Group className="pl-2">
+            <Form.Control readOnly size="sm" value={permaDestination}/>
+          </Form.Group>
+
         </form>
 
-        <Navbar.Text className="pl-2">{permaDestination}</Navbar.Text>
+        
 
       </Navbar.Collapse>
     </Navbar>
