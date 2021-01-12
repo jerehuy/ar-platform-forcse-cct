@@ -90,6 +90,7 @@ export default function AddCoordinate(props) {
             <Form.Group controlId="componentName">
               <Form.Label htmlFor="name">Name the component: </Form.Label>
               <Form.Control type="text" id="name" required value={data.name} onChange={e => setData({...data, name: e.target.value})}/>
+              <Form.Text className="text-muted">Unique name for this component.</Form.Text>
             </Form.Group>
 
             <Form.Group controlId="latitude">
@@ -106,11 +107,13 @@ export default function AddCoordinate(props) {
 
             <Form.Group controlId="audioFile">
               <Form.File id="audio" label="Add audio file: " required accept='.mp3' onChange={e => setData({...data, audio: e.target.files[0]})} />
+              <Form.Text className="text-muted">Audio that plays in selected coordinates.</Form.Text>
             </Form.Group>
 
             <Form.Group controlId="radius">
               <Form.Label htmlFor="rad">Radius (meters): </Form.Label>
               <Form.Control type="number" id="rad" defaultValue={data.radius} onChange={e => setData({...data, radius: e.target.value})}/>
+              <Form.Text className="text-muted">Radius of the area this object covers.</Form.Text>
             </Form.Group>
           </Col>
         </Row>
@@ -119,11 +122,13 @@ export default function AddCoordinate(props) {
           <Form.Group as={Col} sm controlId="activationTime">
             <Form.Label htmlFor="act">Activation (seconds): </Form.Label>
             <Form.Control type="number" id="act" defaultValue={data.activation} onChange={e => setData({...data, activation: e.target.value})}/>
+            <Form.Text className="text-muted">Stay time in area for the audio to activate.</Form.Text>
           </Form.Group>
 
           <Form.Group as={Col} sm controlId="deactivationTime">
             <Form.Label htmlFor="dact">Deactivation (seconds): </Form.Label>
             <Form.Control type="number" id="dact" defaultValue={data.deactivation} onChange={e => setData({...data, deactivation: e.target.value})}/>
+            <Form.Text className="text-muted">Time you need to be out of the area for the audio to deactivate.</Form.Text>
           </Form.Group>
         </Row>
 
