@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Amap from "./Maps";
-import { Col, Row, ListGroup, Form, Button, Container } from "react-bootstrap";
+import { Col, Row, ListGroup, Form, Button, Container, Alert } from "react-bootstrap";
 
 export default function UpdateContent(props) {
 
@@ -129,7 +129,7 @@ export default function UpdateContent(props) {
     }
     else {
       setSelectedImage({...newSelectedImage, removedImages: [], contentImages: []});
-      setActiveImg(newSelectedImage.name);
+      setActiveImg(newSelectedImage.id);
     }
   }
 
@@ -143,7 +143,7 @@ export default function UpdateContent(props) {
     else {
       setSelectedCoord(newSelectedCoord);
       setPosition([newSelectedCoord.latitude, newSelectedCoord.longitude]);
-      setActiveCoord(newSelectedCoord.name);
+      setActiveCoord(newSelectedCoord.id);
     }
   }
 
@@ -194,9 +194,17 @@ export default function UpdateContent(props) {
       <Col md>
         <h5 className="py-2">Images</h5>
 
+        {Object.keys(imageData).length === 0 
+          ? <Alert variant="info" className="text-center">
+            <Alert.Heading>There is nothing here.</Alert.Heading> 
+            Check path or add new images in tab "Add image".
+          </Alert>
+          : null
+        }
+
         {Object.keys(imageData).map((keyName, i) => (
           <ListGroup>
-            <ListGroup.Item active={(activeImg === imageData[i].name) ? true : false} action onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</ListGroup.Item>
+            <ListGroup.Item active={(activeImg === imageData[i].id) ? true : false} action onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</ListGroup.Item>
 
             {(selectedImage != null && imageData[i].id === selectedImage.id) && 
               <Container className="pb-3 border">
@@ -258,9 +266,17 @@ export default function UpdateContent(props) {
       <Col md>
         <h5 className="py-2">Coordinates</h5>
 
+        {Object.keys(gpsData).length === 0
+        ? <Alert variant="info" className="text-center">
+            <Alert.Heading>There is nothing here.</Alert.Heading>  
+            Check path or add new coordinates in tab "Add coordinate".
+          </Alert>
+        : null
+        }
+
         {Object.keys(gpsData).map((keyName, i) => (
           <ListGroup>
-            <ListGroup.Item active={(activeCoord === gpsData[i].name) ? true : false} action onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</ListGroup.Item>
+            <ListGroup.Item active={(activeCoord === gpsData[i].id) ? true : false} action onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</ListGroup.Item>
 
             {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
             <Container className="pb-3 border">
