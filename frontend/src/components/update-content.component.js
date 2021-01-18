@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Amap from "./Maps";
-export default function UpdateContent({path}) {
+import { Col, Row, ListGroup, Form, Button, Container, Alert } from "react-bootstrap";
+
+export default function UpdateContent(props) {
 
   // All image objects
   const [imageData, setImageData] = useState([]);
@@ -14,6 +16,12 @@ export default function UpdateContent({path}) {
 
   // Coordinate object that is being edited
   const [selectedCoord, setSelectedCoord]  = useState(null);
+
+  //Active image object
+  const [activeImg, setActiveImg] = useState("");
+
+  //Active coordinate object
+  const [activeCoord, setActiveCoord] = useState("");
 
   // Fetches image and coordinate objects
   useEffect(() => {
@@ -117,9 +125,11 @@ export default function UpdateContent({path}) {
   const onChangeSelectedImage = (newSelectedImage) => {
     if(selectedImage != null && selectedImage.id === newSelectedImage.id) {
       setSelectedImage(null);
+      setActiveImg("");
     }
     else {
-      setSelectedImage({...newSelectedImage, removedImages: [], contentImages: []})
+      setSelectedImage({...newSelectedImage, removedImages: [], contentImages: []});
+      setActiveImg(newSelectedImage.id);
     }
   }
 
@@ -128,16 +138,18 @@ export default function UpdateContent({path}) {
     if(selectedCoord != null && selectedCoord.id === newSelectedCoord.id) {
       setSelectedCoord(null);
       setPosition([]);
+      setActiveCoord("");
     }
     else {
       setSelectedCoord(newSelectedCoord);
       setPosition([newSelectedCoord.latitude, newSelectedCoord.longitude]);
+      setActiveCoord(newSelectedCoord.id);
     }
   }
 
   const onRemoveAudio = (e, audioName) => {
     e.preventDefault();
-    if (window.confirm('Are you sure you wish to remove this content image?')) {
+    if (window.confirm('Are you sure you wish to remove this audio?')) {
       setSelectedImage({...selectedImage, audioName:""});
     }
   }
@@ -170,7 +182,7 @@ export default function UpdateContent({path}) {
     }
   }
 
-  //map handeling
+  //map handling
   const [position, setPosition] = useState([])
   function handleMapChange(newPosition) {
     setSelectedCoord({...selectedCoord, latitude: newPosition[0], longitude: newPosition[1]})
@@ -178,106 +190,155 @@ export default function UpdateContent({path}) {
   }
 
   return (
-    <div className="row">
-      <div className="col-md">
+    <Row>
+      <Col md>
         <h5 className="py-2">Images</h5>
+
+        {Object.keys(imageData).length === 0 
+          ? <Alert variant="info" className="text-center">
+            <Alert.Heading>There is nothing here.</Alert.Heading> 
+            Check path or add new images in tab "Add image".
+          </Alert>
+          : null
+        }
+
         {Object.keys(imageData).map((keyName, i) => (
-          <div className="list-group">
-            <label className="list-group-item list-group-item-action" onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</label>
+          <ListGroup>
+            <ListGroup.Item active={(activeImg === imageData[i].id) ? true : false} action onClick={() => onChangeSelectedImage(imageData[i])}>{imageData[i].name}</ListGroup.Item>
+
             {(selectedImage != null && imageData[i].id === selectedImage.id) && 
-              <div className="pb-3">
-                <form onSubmit={onUpdateImage}>
-                  <div className="form-group">
-                    <label htmlFor="name">Object name</label> <br/>
-                    <input type="text" name="name" id="name" required className="form-control" value={selectedImage.name} onChange={e => setSelectedImage({...selectedImage, name: e.target.value})}/>
-                  </div>
-                  <div className="form-group">
-                    <label>Tracked image name: {selectedImage.trackedImageName}</label><br/>
-                    <label htmlFor="tracked">Change tracked image: </label>
-                    <input type="file" id="tracked" class="form-control-file border rounded" accept='.jpg, .png' onChange={e => setSelectedImage({...selectedImage, image: e.target.files[0]})} />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="desc">Description: </label>
-                    <textarea rows="3" id="desc" required className="form-control" value={selectedImage.text} onChange={e => setSelectedImage({...selectedImage, text: e.target.value})}/>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="images">Content images (optional): </label>
-                    <input type="file" className="form-control-file border rounded" name="images[]" id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
-                    <small className="form-text text-muted">Add new content images one at a time they will show up below this text.</small>
+              <Container className="pb-3 border">
+                <form onSubmit={onUpdateImage} className="px-3 pt-1">
+
+                  <Form.Group controlId="imgComponentName">
+                    <Form.Label htmlFor="name">Object name: </Form.Label> <br/>
+                    <Form.Control type="text" id="name" required value={selectedImage.name} onChange={e => setSelectedImage({...selectedImage, name: e.target.value})}/>
+                  </Form.Group>
+
+                  <Form.Group controlId="trackedImageInfo">
+                    <Form.Label>Tracked image name: {selectedImage.trackedImageName}</Form.Label><br/>
+                    <Form.File id="tracked" accept='.jpg, .png' label="Change tracked image: " onChange={e => setSelectedImage({...selectedImage, image: e.target.files[0]})} />
+                  </Form.Group>
+
+                  <Form.Group controlId="description">
+                    <Form.Label htmlFor="desc">Description: </Form.Label>
+                    <Form.Control as='textarea' rows="3" id="desc" required value={selectedImage.text} onChange={e => setSelectedImage({...selectedImage, text: e.target.value})}/>
+                  </Form.Group>
+                  
+                  <Form.Group controlId="contentImages">
+                    <Form.Label htmlFor="images">Content images (optional): </Form.Label>
+                    <Form.File id="images" accept='.jpg, .png' onChange={e => onAddContentImage(e)}/>
+                    <Form.Text className="text-muted">Add new content images one at a time they will show up below this text.</Form.Text>
+
                     {selectedImage.contentImageNames.map(imgName => (
-                      <div>
-                        <label htmlFor="contentImg" className="pr-1">{imgName}</label>
-                        <button id="contentImg" name="removeContentImg" className="btn btn-outline-danger" onClick={e => onRemoveContentImage(e, imgName)}>Remove Content Image</button>
-                      </div>
+                      <Form.Group controlId="contentImage">
+                        <Form.Label htmlFor="contentImg" className="pr-1">{imgName}</Form.Label>
+                        <Button id="contentImg" name="removeContentImg" variant="outline-danger" onClick={e => onRemoveContentImage(e, imgName)}>Remove Content Image</Button>
+                      </Form.Group>
                     ))}
-                  </div>
-                  <div className="form-group">
-                    <label className="pr-1">Name of the audio file: {selectedImage.audioName} </label> 
-                    <button className="btn btn-outline-danger" onClick={e => onRemoveAudio(e, selectedImage.audioName)}>Remove audiofile</button> <br/>
-                    <label htmlFor="audio">Add/Change audiofile (optional): </label>
-                    <input type="file" className="form-control-file border rounded" name="audio" id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
-                  </div>
-                  <div className="form-group">
-                    <input type="submit" value="Save changes" className="btn btn-outline-primary"/>
-                  </div>
+                  </Form.Group>
+
+                  <Form.Group controlId="audioFileForImg">
+                    <Form.Label className="pr-1">Name of the audio file: {selectedImage.audioName} </Form.Label> 
+                    {selectedImage.audioName
+                      ? <Button variant="outline-danger" onClick={e => onRemoveAudio(e, selectedImage.audioName)}>Remove audiofile</Button>
+                      : null
+                    } <br/>
+                    <Form.File label="Add/Change audiofile (optional): " id="audio" accept='.mp3' onChange={e => setSelectedImage({...selectedImage, audio: e.target.files[0]})}/>
+                  </Form.Group>
+
+                  <Row>
+                    <Form.Group as={Col} sm>
+                      <Button type="submit" variant="outline-primary">Save changes</Button>
+                    </Form.Group>
+
+                    <Form.Group as={Col} sm>
+                      <Button id={imageData[i].id} variant="outline-danger" onClick={onRemoveImage}>Remove "{selectedImage.name}"</Button>
+                    </Form.Group>
+                  </Row>
                 </form>
-                <button id={imageData[i].id} onClick={onRemoveImage} className="btn btn-outline-danger">Remove component "{selectedImage.name}"</button>
-              </div>
+              </Container>
             }
-          </div>
+          </ListGroup>
         ))}
-      </div>
-      <div className="col-md">
+      </Col>
+
+      <Col md>
         <h5 className="py-2">Coordinates</h5>
+
+        {Object.keys(gpsData).length === 0
+        ? <Alert variant="info" className="text-center">
+            <Alert.Heading>There is nothing here.</Alert.Heading>  
+            Check path or add new coordinates in tab "Add coordinate".
+          </Alert>
+        : null
+        }
+
         {Object.keys(gpsData).map((keyName, i) => (
-          <div className="list-group">
-            <label className="list-group-item list-group-item-action" onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</label>
+          <ListGroup>
+            <ListGroup.Item active={(activeCoord === gpsData[i].id) ? true : false} action onClick={() => onChangeSelectedCoord(gpsData[i])}>{gpsData[i].name}</ListGroup.Item>
+
             {(selectedCoord != null && gpsData[i].id === selectedCoord.id) && 
-            <div className="pb-3">
-              <Amap position={position} onChange={handleMapChange}/>
-              <small className="form-text text-muted">
-                Notice: Position of the marker changes when you click on the map!
-              </small>
-              <form onSubmit={onUpdateCoordinates}>
-                <div className="form-group">
-                    <label htmlFor="name">Object name</label> <br/>
-                    <input type="text" name="name" id="name" required className="form-control" value={selectedCoord.name} onChange={e => setSelectedCoord({...selectedCoord, name: e.target.value})}/>
-                  </div>
-                <div className="form-group">
-                  <label>Latitude</label>
-                  <input type="text" required className="form-control" value={selectedCoord.latitude} />
-                </div>
-                <div className="form-group">
-                  <label>Longitude</label>
-                  <input type="text" required className="form-control" value={selectedCoord.longitude} />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="rad">Radius (meters)</label>
-                  <input type="number" id="rad" defaultValue={selectedCoord.radius} className="form-control" onChange={e => setSelectedCoord({...selectedCoord, radius: e.target.value})}/>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="act">Activation (seconds)</label>
-                  <input type="number" id="act" defaultValue={selectedCoord.activation} className="form-control" onChange={e => setSelectedCoord({...selectedCoord, activation: e.target.value})}/>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="dact">Deactivation (seconds)</label>
-                  <input type="number" id="dact" defaultValue={selectedCoord.deactivation} className="form-control" onChange={e => setSelectedCoord({...selectedCoord, deactivation: e.target.value})}/>
-                </div>
-                <div className="form-group">
-                  <label>Name of the audio file: {selectedCoord.audioName}</label> <br/>
-                  <label htmlFor="audio">Change audio file: </label>
-                  <input type="file" className="form-control-file border rounded" id="audio" accept='.mp3' onChange={e => setSelectedCoord({...selectedCoord, audio: e.target.files[0], audioName: e.target.files[0].name})} />
-                </div>
-                <div className="form-group">
-                  <input type="submit" value="Save changes" className="btn btn-outline-primary"/>
-                </div>
+            <Container className="pb-3 border">
+              <form onSubmit={onUpdateCoordinates} className="px-3 pt-2">
+
+                <Form.Group controlId="map">
+                  <Amap position={position} onChange={handleMapChange}/>
+                  <Form.Text className="text-muted">
+                    Notice: Position of the marker changes when you click on the map!
+                  </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="coordComponentName">
+                  <Form.Label htmlFor="name">Object name</Form.Label> <br/>
+                  <Form.Control type="text" name="name" id="name" required value={selectedCoord.name} onChange={e => setSelectedCoord({...selectedCoord, name: e.target.value})}/>
+                </Form.Group>
+
+                <Form.Group controlId="latitude">
+                  <Form.Label htmlFor="lat">Latitude</Form.Label>
+                  <Form.Control type="text" id="lat" required value={selectedCoord.latitude} />
+                </Form.Group>
+
+                <Form.Group controlId="longtitude">
+                  <Form.Label htmlFor="lng">Longitude</Form.Label>
+                  <Form.Control type="text" id="lng" required value={selectedCoord.longitude} />
+                </Form.Group>
+
+                <Form.Group controlId="radius">
+                  <Form.Label htmlFor="rad">Radius (meters)</Form.Label>
+                  <Form.Control type="number" id="rad" defaultValue={selectedCoord.radius} onChange={e => setSelectedCoord({...selectedCoord, radius: e.target.value})}/>
+                </Form.Group>
+
+                <Form.Group controlId="activationTime">
+                  <Form.Label htmlFor="act">Activation (seconds)</Form.Label>
+                  <Form.Control type="number" id="act" defaultValue={selectedCoord.activation} onChange={e => setSelectedCoord({...selectedCoord, activation: e.target.value})}/>
+                </Form.Group>
+
+                <Form.Group controlId="deactivationTime">
+                  <Form.Label htmlFor="dact">Deactivation (seconds)</Form.Label>
+                  <Form.Control type="number" id="dact" defaultValue={selectedCoord.deactivation} onChange={e => setSelectedCoord({...selectedCoord, deactivation: e.target.value})}/>
+                </Form.Group>
+
+                <Form.Group controlId="audioFileForCoord">
+                  <Form.Label>Name of the audio file: {selectedCoord.audioName}</Form.Label> <br/>
+                  <Form.File id="audio" accept='.mp3' label="Change audio file: " onChange={e => setSelectedCoord({...selectedCoord, audio: e.target.files[0], audioName: e.target.files[0].name})} />
+                </Form.Group>
+
+                <Row>
+                <Form.Group as={Col} sm>
+                  <Button type="submit" variant="outline-primary">Save changes</Button>
+                </Form.Group>
+
+                <Form.Group as={Col} sm>
+                  <Button id={gpsData[i].id} variant="outline-danger" onClick={onRemoveCoordinates}>Remove "{selectedCoord.name}"</Button>
+                </Form.Group>
+                </Row>
               </form>
-              <button id={gpsData[i].id} onClick={onRemoveCoordinates} className="btn btn-outline-danger">Remove Component "{selectedCoord.name}"</button>
-            </div>
+            </Container>
             } 
-          </div>
+          </ListGroup>
         ))}
-      </div>
-    </div>
+      </Col>
+    </Row>
   )
 }

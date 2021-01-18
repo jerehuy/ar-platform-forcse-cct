@@ -5,6 +5,7 @@ import Navigation from "./components/navigation.component";
 import AddImage from "./components/add-image.component";
 import AddCoordinate from "./components/add-coordinate.component";
 import UpdateContent from "./components/update-content.component";
+import {Container} from "react-bootstrap";
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
   }
   return (
     <Router>
-      <div className="container bg-light pb-1 rounded-bottom"> 
+      <Container className="bg-light pb-1 rounded-bottom"> 
         <Navigation onChangePath={handleChangePath}/>
         <Route 
           path="/image"
@@ -35,7 +36,7 @@ function App() {
             <UpdateContent {...props} path={path} />
           )}
         />
-      </div>
+      </Container>
     </Router>
   );
 }
