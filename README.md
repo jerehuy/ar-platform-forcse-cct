@@ -1,4 +1,5 @@
 # About the project
+
 This repository contains a content creation tool that allows new content to be created for the main application, which can be found in https://github.com/jerehuy/ar-platform-forcse
 
 # Installing and running (Windows)
